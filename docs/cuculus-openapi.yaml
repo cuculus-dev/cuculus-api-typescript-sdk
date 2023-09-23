@@ -1,0 +1,816 @@
+openapi: 3.0.0
+paths:
+  /v0/sample:
+    get:
+      operationId: getHello
+      summary: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+        - sample
+  /v0/users/me:
+    get:
+      operationId: getMe
+      summary: 自身の情報を返す
+      parameters: []
+      responses:
+        '200':
+          description: ログインしてるユーザー情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: JWTが無効、または期限切れ
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - users
+      security:
+        - bearer: []
+  /v0/users/by/username/{username}:
+    get:
+      operationId: getUserByUsername
+      summary: ユーザー名からユーザーを取得する
+      parameters:
+        - name: username
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ユーザー情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - users
+  /v0/users/{id}:
+    get:
+      operationId: getUserById
+      summary: ユーザーIDからユーザーを取得する
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ユーザー情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - users
+  /v0/users/{id}/posts:
+    get:
+      operationId: getUserPosts
+      summary: ユーザーIDから投稿を取得する
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: 投稿一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - users
+      security:
+        - {}
+        - bearer: []
+  /v0/users/{id}/followers:
+    get:
+      operationId: getUserFollowers
+      summary: ユーザーIDからフォロワーを取得する
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: フォロワー一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - users
+      security:
+        - {}
+        - bearer: []
+  /v0/users/{id}/following:
+    get:
+      operationId: getUserFollowing
+      summary: ユーザーIDからフォローを取得する
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: フォロー一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - users
+      security:
+        - {}
+        - bearer: []
+  /v0/users/{id}/follow:
+    post:
+      operationId: createFollow
+      summary: ユーザーIDをフォローする
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '201':
+          description: ''
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - users
+      security:
+        - bearer: []
+    delete:
+      operationId: deleteFollow
+      summary: ユーザーIDをフォロー解除する
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - users
+      security:
+        - bearer: []
+  /v0/auth/pre-sign-up:
+    post:
+      operationId: postPreSignUp
+      summary: 仮登録API
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreUserRequest'
+      responses:
+        '201':
+          description: 仮登録成功。認証コードをメールで送信します。
+        '409':
+          description: 既に登録済みのユーザー
+      tags:
+        - auth
+  /v0/auth/verify-code:
+    post:
+      operationId: postVerifyCode
+      summary: 認証コードの確認
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyCodeRequest'
+      responses:
+        '200':
+          description: 認証OK
+        '400':
+          description: 認証コードが違います。
+        '403':
+          description: 認証コードを間違えすぎた。
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - auth
+  /v0/auth/sign-up:
+    post:
+      operationId: postSignUp
+      summary: 本登録API
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '201':
+          description: アカウント作成成功。
+          headers:
+            Set-Cookie:
+              description: auth_tokenを返却します。
+              schema:
+                type: string
+                example: >-
+                  auth_token=abcde12345; Domain=.localhost; Path=/; HttpOnly;
+                  Secure;
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: 認証コードが違います。
+        '403':
+          description: 認証コードを間違えすぎた。
+        '404':
+          description: ユーザーが見つかりませんでした。
+        '409':
+          description: 既に登録済みもしくは使用済みのID
+      tags:
+        - auth
+  /v0/auth/sign-in:
+    post:
+      operationId: postSignIn
+      summary: ログインAPI
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: web用にauth_tokenはset-cookieでも返却します。
+          headers:
+            Set-Cookie:
+              description: auth_tokenを返却します。
+              schema:
+                type: string
+                example: >-
+                  auth_token=abcde12345; Domain=.localhost; Path=/; HttpOnly;
+                  Secure;
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: ユーザー名またはパスワードが間違っている。
+      tags:
+        - auth
+  /v0/auth/token/refresh:
+    post:
+      operationId: postTokenRefresh
+      summary: アクセストークンの再発行(現在はCookieのみ対応)
+      parameters: []
+      responses:
+        '201':
+          description: 発行されたアクセストークン
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: auth_tokenが無効、または期限切れ
+      tags:
+        - auth
+      security:
+        - cookie: []
+  /v0/posts:
+    post:
+      operationId: createPost
+      summary: 引用ポスト、ポスト、リプライに対応(予定)
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '401':
+          description: ''
+      tags:
+        - posts
+      security:
+        - bearer: []
+  /v0/posts/{id}:
+    get:
+      operationId: getPost
+      summary: ポストIDからポストを取得する(認証は任意)
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ポスト情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '404':
+          description: 投稿が見つかりませんでした。
+      tags:
+        - posts
+      security:
+        - {}
+        - bearer: []
+    delete:
+      operationId: deletePost
+      summary: Postの削除
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+        '404':
+          description: 投稿が見つかりませんでした。
+      tags:
+        - posts
+      security:
+        - bearer: []
+  /v0/posts/{id}/reposted_by:
+    get:
+      operationId: getRepostedBy
+      summary: ポストIDからリポストしたアカウント一覧を返す
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: ''
+      tags:
+        - posts
+      security:
+        - {}
+        - bearer: []
+  /v0/posts/{id}/favorited_by:
+    get:
+      operationId: getFavoritedBy
+      summary: ポストIDからお気に入りしたアカウント一覧を返す
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: ''
+      tags:
+        - posts
+      security:
+        - {}
+        - bearer: []
+  /v0/posts/{id}/favorite:
+    post:
+      operationId: createFavorite
+      summary: お気に入り登録
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '401':
+          description: ''
+        '404':
+          description: ''
+      tags:
+        - posts
+      security:
+        - bearer: []
+    delete:
+      operationId: deleteFavorite
+      summary: お気に入り登録解除
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '401':
+          description: ''
+        '404':
+          description: ''
+      tags:
+        - posts
+      security:
+        - bearer: []
+  /v0/posts/{id}/repost:
+    post:
+      operationId: createRepost
+      summary: リポスト
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '401':
+          description: ''
+        '404':
+          description: ''
+      tags:
+        - posts
+      security:
+        - bearer: []
+    delete:
+      operationId: deleteRepost
+      summary: リポスト解除
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '401':
+          description: ''
+        '404':
+          description: ''
+      tags:
+        - posts
+      security:
+        - bearer: []
+  /v0/timelines/home:
+    get:
+      operationId: getHomeTimeline
+      summary: ホームタイムラインの取得
+      parameters:
+        - name: limit
+          required: false
+          in: query
+          description: デフォルト:20
+          schema:
+            type: number
+        - name: since_id
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: until_id
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ポスト一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+      tags:
+        - timelines
+      security:
+        - bearer: []
+info:
+  title: Cuculus API
+  description: The Cuculus API description
+  version: '1.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+    cookie:
+      type: apiKey
+      in: cookie
+      name: auth_token
+  schemas:
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        username:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        description:
+          type: string
+        profile_image_url:
+          type: string
+        protected:
+          type: boolean
+        url:
+          type: string
+        verified:
+          type: boolean
+      required:
+        - id
+        - name
+        - username
+        - created_at
+        - description
+        - profile_image_url
+        - protected
+        - url
+        - verified
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        username:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        description:
+          type: string
+        profile_image_url:
+          type: string
+        protected:
+          type: boolean
+        url:
+          type: string
+        verified:
+          type: boolean
+      required:
+        - id
+        - name
+        - username
+        - created_at
+        - description
+        - profile_image_url
+        - protected
+        - url
+        - verified
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+        original_post_id:
+          type: string
+          description: リポスト|引用元ID|オリジナルには含まれません。
+        reply_to_post_id:
+          type: string
+          description: リプライ先ID|リプライでない場合は含まれません。
+        author:
+          $ref: '#/components/schemas/User'
+        text:
+          type: string
+          description: 本文|空orNullの場合はRTです。
+        posted_at:
+          format: date-time
+          type: string
+      required:
+        - id
+        - original_post_id
+        - reply_to_post_id
+        - author
+        - text
+        - posted_at
+    PostResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        original_post_id:
+          type: string
+          description: リポスト|引用元ID|オリジナルには含まれません。
+        reply_to_post_id:
+          type: string
+          description: リプライ先ID|リプライでない場合は含まれません。
+        author:
+          $ref: '#/components/schemas/User'
+        text:
+          type: string
+          description: 本文|空orNullの場合はRTです。
+        posted_at:
+          format: date-time
+          type: string
+        original_post:
+          description: リポスト元
+          allOf:
+            - $ref: '#/components/schemas/Post'
+        reposted:
+          type: boolean
+          description: リポスト済み
+        repost_count:
+          type: number
+          description: リポスト数
+        favorited:
+          type: boolean
+          description: お気に入り登録済み
+        favorite_count:
+          type: number
+          description: お気に入り数
+      required:
+        - id
+        - original_post_id
+        - reply_to_post_id
+        - author
+        - text
+        - posted_at
+        - original_post
+        - reposted
+        - repost_count
+        - favorited
+        - favorite_count
+    PreUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 表示名
+          example: ククルス
+        email:
+          type: string
+          description: メールアドレス
+          example: cuculus@example.com
+      required:
+        - name
+        - email
+    VerifyCodeRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: メールアドレス
+          example: cuculus@example.com
+        code:
+          type: string
+          description: 認証コード
+          example: '012345'
+      required:
+        - email
+        - code
+    UserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: メールアドレス
+          example: cuculus@example.com
+        code:
+          type: string
+          description: 認証コード
+          example: '012345'
+        username:
+          type: string
+          description: ユーザーID
+          example: cuculus
+        password:
+          type: string
+          description: パスワード
+          example: password
+      required:
+        - email
+        - code
+        - username
+        - password
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        auth_token:
+          type: string
+      required:
+        - access_token
+        - auth_token
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: ユーザーID
+          example: cuculus
+        password:
+          type: string
+          description: パスワード
+          example: password
+      required:
+        - username
+        - password
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+      required:
+        - access_token
+    CreatePost:
+      type: object
+      properties:
+        original_post_id:
+          type: string
+          description: 引用元ID
+        text:
+          type: string
+      required:
+        - original_post_id
+        - text

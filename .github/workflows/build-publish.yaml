@@ -1,0 +1,57 @@
+name: build and publish package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      deployments: write
+      issues: write
+      packages: write
+      pull-requests: write
+      repository-projects: write
+      security-events: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com/
+
+      - name: Install openapi-generator-cli
+        run: npm install -g @openapitools/openapi-generator-cli
+
+      - name: Generate src
+        run: openapi-generator-cli generate -i ./docs/cuculus-openapi.yaml -g typescript-fetch -o ./src -c ./config.json
+
+      - name: Update package.json version
+        uses: jossef/action-set-json-field@v1
+        with:
+          file: ./package.json
+          field: version
+          value: ${{ github.event.release.name }}
+
+      - name: Commit and push
+        run: |
+          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git add src/
+          git commit -m "$(date +'%Y-%m-%d') Update"
+          git push origin HEAD:${GITHUB_REF}
+
+      - name: Package install
+        run: npm install
+
+      - name: Publish package
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

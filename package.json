@@ -1,0 +1,25 @@
+{
+  "name": "@cuculus-dev/cuculus-api",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^20.6.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com/cuculus-dev"
+  },
+  "volta": {
+    "node": "18.17.1",
+    "npm": "9.8.1"
+  }
+}
