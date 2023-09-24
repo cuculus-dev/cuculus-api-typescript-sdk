@@ -1,5 +1,5 @@
 {
-  "name": "@cuculus-dev/cuculus-api",
+  "name": "@cuculus/cuculus-api",
   "version": "0.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,8 +16,7 @@
     "typescript": "^5.2.2"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com/cuculus-dev"
+    "registry": "https://registry.npmjs.org/"
   },
   "volta": {
     "node": "18.17.1",
