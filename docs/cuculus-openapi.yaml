@@ -1,19 +1,5 @@
 openapi: 3.0.0
 paths:
-  /v0/sample:
-    get:
-      operationId: getHello
-      summary: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: string
-      tags:
-        - sample
   /v0/users/me:
     get:
       operationId: getMe
