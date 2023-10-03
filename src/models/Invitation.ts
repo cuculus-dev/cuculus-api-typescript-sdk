@@ -16,50 +16,50 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface VerifyCodeRequest
+ * @interface Invitation
  */
-export interface VerifyCodeRequest {
+export interface Invitation {
     /**
-     * メールアドレス
+     * 招待コード
      * @type {string}
-     * @memberof VerifyCodeRequest
-     */
-    email: string;
-    /**
-     * 認証コード
-     * @type {string}
-     * @memberof VerifyCodeRequest
+     * @memberof Invitation
      */
     code: string;
+    /**
+     * 招待コードの発行日時
+     * @type {Date}
+     * @memberof Invitation
+     */
+    issuedAt: Date;
 }
 
 /**
- * Check if a given object implements the VerifyCodeRequest interface.
+ * Check if a given object implements the Invitation interface.
  */
-export function instanceOfVerifyCodeRequest(value: object): boolean {
+export function instanceOfInvitation(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "email" in value;
     isInstance = isInstance && "code" in value;
+    isInstance = isInstance && "issuedAt" in value;
 
     return isInstance;
 }
 
-export function VerifyCodeRequestFromJSON(json: any): VerifyCodeRequest {
-    return VerifyCodeRequestFromJSONTyped(json, false);
+export function InvitationFromJSON(json: any): Invitation {
+    return InvitationFromJSONTyped(json, false);
 }
 
-export function VerifyCodeRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): VerifyCodeRequest {
+export function InvitationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Invitation {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'email': json['email'],
         'code': json['code'],
+        'issuedAt': (new Date(json['issued_at'])),
     };
 }
 
-export function VerifyCodeRequestToJSON(value?: VerifyCodeRequest | null): any {
+export function InvitationToJSON(value?: Invitation | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -68,8 +68,8 @@ export function VerifyCodeRequestToJSON(value?: VerifyCodeRequest | null): any {
     }
     return {
         
-        'email': value.email,
         'code': value.code,
+        'issued_at': (value.issuedAt.toISOString()),
     };
 }
 
