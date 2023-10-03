@@ -837,10 +837,7 @@ components:
           type: string
       required:
         - id
-        - original_post_id
-        - reply_to_post_id
         - author
-        - text
         - posted_at
     PostResponse:
       type: object
@@ -879,12 +876,8 @@ components:
           description: お気に入り数
       required:
         - id
-        - original_post_id
-        - reply_to_post_id
         - author
-        - text
         - posted_at
-        - original_post
         - reposted
         - repost_count
         - favorited
@@ -945,7 +938,6 @@ components:
         - code
         - username
         - password
-        - invitation_code
     AuthResponse:
       type: object
       properties:
@@ -986,7 +978,6 @@ components:
         text:
           type: string
       required:
-        - original_post_id
         - text
     InvitationCodeRequest:
       type: object
