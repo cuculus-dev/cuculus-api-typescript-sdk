@@ -7,5 +7,5 @@ CuculusのAPIドキュメントは[こちら](https://redoc.cuculus.jp/)
 
 ## Installing
 ```
-npm install @cuculus-dev/cuculus-api
+npm install @cuculus/cuculus-api
 ```
