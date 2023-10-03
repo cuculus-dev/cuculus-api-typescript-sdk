@@ -48,7 +48,7 @@ export interface UserRequest {
      * @type {string}
      * @memberof UserRequest
      */
-    invitationCode: string;
+    invitationCode?: string;
 }
 
 /**
@@ -60,7 +60,6 @@ export function instanceOfUserRequest(value: object): boolean {
     isInstance = isInstance && "code" in value;
     isInstance = isInstance && "username" in value;
     isInstance = isInstance && "password" in value;
-    isInstance = isInstance && "invitationCode" in value;
 
     return isInstance;
 }
@@ -79,7 +78,7 @@ export function UserRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'code': json['code'],
         'username': json['username'],
         'password': json['password'],
-        'invitationCode': json['invitation_code'],
+        'invitationCode': !exists(json, 'invitation_code') ? undefined : json['invitation_code'],
     };
 }
 

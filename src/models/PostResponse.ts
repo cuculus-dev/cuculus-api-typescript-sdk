@@ -43,13 +43,13 @@ export interface PostResponse {
      * @type {string}
      * @memberof PostResponse
      */
-    originalPostId: string;
+    originalPostId?: string;
     /**
      * リプライ先ID|リプライでない場合は含まれません。
      * @type {string}
      * @memberof PostResponse
      */
-    replyToPostId: string;
+    replyToPostId?: string;
     /**
      * 
      * @type {User}
@@ -61,7 +61,7 @@ export interface PostResponse {
      * @type {string}
      * @memberof PostResponse
      */
-    text: string;
+    text?: string;
     /**
      * 
      * @type {Date}
@@ -73,7 +73,7 @@ export interface PostResponse {
      * @type {Post}
      * @memberof PostResponse
      */
-    originalPost: Post;
+    originalPost?: Post;
     /**
      * リポスト済み
      * @type {boolean}
@@ -106,12 +106,8 @@ export interface PostResponse {
 export function instanceOfPostResponse(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "originalPostId" in value;
-    isInstance = isInstance && "replyToPostId" in value;
     isInstance = isInstance && "author" in value;
-    isInstance = isInstance && "text" in value;
     isInstance = isInstance && "postedAt" in value;
-    isInstance = isInstance && "originalPost" in value;
     isInstance = isInstance && "reposted" in value;
     isInstance = isInstance && "repostCount" in value;
     isInstance = isInstance && "favorited" in value;
@@ -131,12 +127,12 @@ export function PostResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'id': json['id'],
-        'originalPostId': json['original_post_id'],
-        'replyToPostId': json['reply_to_post_id'],
+        'originalPostId': !exists(json, 'original_post_id') ? undefined : json['original_post_id'],
+        'replyToPostId': !exists(json, 'reply_to_post_id') ? undefined : json['reply_to_post_id'],
         'author': UserFromJSON(json['author']),
-        'text': json['text'],
+        'text': !exists(json, 'text') ? undefined : json['text'],
         'postedAt': (new Date(json['posted_at'])),
-        'originalPost': PostFromJSON(json['original_post']),
+        'originalPost': !exists(json, 'original_post') ? undefined : PostFromJSON(json['original_post']),
         'reposted': json['reposted'],
         'repostCount': json['repost_count'],
         'favorited': json['favorited'],

@@ -37,13 +37,13 @@ export interface Post {
      * @type {string}
      * @memberof Post
      */
-    originalPostId: string;
+    originalPostId?: string;
     /**
      * リプライ先ID|リプライでない場合は含まれません。
      * @type {string}
      * @memberof Post
      */
-    replyToPostId: string;
+    replyToPostId?: string;
     /**
      * 
      * @type {User}
@@ -55,7 +55,7 @@ export interface Post {
      * @type {string}
      * @memberof Post
      */
-    text: string;
+    text?: string;
     /**
      * 
      * @type {Date}
@@ -70,10 +70,7 @@ export interface Post {
 export function instanceOfPost(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "originalPostId" in value;
-    isInstance = isInstance && "replyToPostId" in value;
     isInstance = isInstance && "author" in value;
-    isInstance = isInstance && "text" in value;
     isInstance = isInstance && "postedAt" in value;
 
     return isInstance;
@@ -90,10 +87,10 @@ export function PostFromJSONTyped(json: any, ignoreDiscriminator: boolean): Post
     return {
         
         'id': json['id'],
-        'originalPostId': json['original_post_id'],
-        'replyToPostId': json['reply_to_post_id'],
+        'originalPostId': !exists(json, 'original_post_id') ? undefined : json['original_post_id'],
+        'replyToPostId': !exists(json, 'reply_to_post_id') ? undefined : json['reply_to_post_id'],
         'author': UserFromJSON(json['author']),
-        'text': json['text'],
+        'text': !exists(json, 'text') ? undefined : json['text'],
         'postedAt': (new Date(json['posted_at'])),
     };
 }

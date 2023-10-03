@@ -24,7 +24,7 @@ export interface CreatePost {
      * @type {string}
      * @memberof CreatePost
      */
-    originalPostId: string;
+    originalPostId?: string;
     /**
      * 
      * @type {string}
@@ -38,7 +38,6 @@ export interface CreatePost {
  */
 export function instanceOfCreatePost(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "originalPostId" in value;
     isInstance = isInstance && "text" in value;
 
     return isInstance;
@@ -54,7 +53,7 @@ export function CreatePostFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'originalPostId': json['original_post_id'],
+        'originalPostId': !exists(json, 'original_post_id') ? undefined : json['original_post_id'],
         'text': json['text'],
     };
 }
