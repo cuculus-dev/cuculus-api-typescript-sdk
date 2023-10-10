@@ -156,6 +156,31 @@ export class AuthApi extends runtime.BaseAPI {
     }
 
     /**
+     * ログアウトAPI
+     */
+    async postSignOutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/v0/auth/sign-out`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * ログアウトAPI
+     */
+    async postSignOut(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.postSignOutRaw(initOverrides);
+    }
+
+    /**
      * 本登録API
      */
     async postSignUpRaw(requestParameters: PostSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthResponse>> {
