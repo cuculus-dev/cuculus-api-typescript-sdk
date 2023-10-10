@@ -313,6 +313,18 @@ paths:
         - auth
       security:
         - cookie: []
+  /v0/auth/sign-out:
+    post:
+      operationId: postSignOut
+      summary: ログアウトAPI
+      parameters: []
+      responses:
+        '200':
+          description: ログアウト成功
+      tags:
+        - auth
+      security:
+        - cookie: []
   /health:
     get:
       operationId: HealthController_check
