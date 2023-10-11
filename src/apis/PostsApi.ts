@@ -16,16 +16,16 @@
 import * as runtime from '../runtime';
 import type {
   CreatePost,
-  PostResponse,
   User,
+  UserPost,
 } from '../models/index';
 import {
     CreatePostFromJSON,
     CreatePostToJSON,
-    PostResponseFromJSON,
-    PostResponseToJSON,
     UserFromJSON,
     UserToJSON,
+    UserPostFromJSON,
+    UserPostToJSON,
 } from '../models/index';
 
 export interface CreateFavoriteRequest {
@@ -72,7 +72,7 @@ export class PostsApi extends runtime.BaseAPI {
     /**
      * お気に入り登録
      */
-    async createFavoriteRaw(requestParameters: CreateFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostResponse>> {
+    async createFavoriteRaw(requestParameters: CreateFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling createFavorite.');
         }
@@ -96,13 +96,13 @@ export class PostsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserPostFromJSON(jsonValue));
     }
 
     /**
      * お気に入り登録
      */
-    async createFavorite(requestParameters: CreateFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostResponse> {
+    async createFavorite(requestParameters: CreateFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPost> {
         const response = await this.createFavoriteRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -110,7 +110,7 @@ export class PostsApi extends runtime.BaseAPI {
     /**
      * 引用ポスト、ポスト、リプライに対応(予定)
      */
-    async createPostRaw(requestParameters: CreatePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostResponse>> {
+    async createPostRaw(requestParameters: CreatePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
         if (requestParameters.createPost === null || requestParameters.createPost === undefined) {
             throw new runtime.RequiredError('createPost','Required parameter requestParameters.createPost was null or undefined when calling createPost.');
         }
@@ -137,13 +137,13 @@ export class PostsApi extends runtime.BaseAPI {
             body: CreatePostToJSON(requestParameters.createPost),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserPostFromJSON(jsonValue));
     }
 
     /**
      * 引用ポスト、ポスト、リプライに対応(予定)
      */
-    async createPost(requestParameters: CreatePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostResponse> {
+    async createPost(requestParameters: CreatePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPost> {
         const response = await this.createPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -151,7 +151,7 @@ export class PostsApi extends runtime.BaseAPI {
     /**
      * リポスト
      */
-    async createRepostRaw(requestParameters: CreateRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostResponse>> {
+    async createRepostRaw(requestParameters: CreateRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling createRepost.');
         }
@@ -175,13 +175,13 @@ export class PostsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserPostFromJSON(jsonValue));
     }
 
     /**
      * リポスト
      */
-    async createRepost(requestParameters: CreateRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostResponse> {
+    async createRepost(requestParameters: CreateRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPost> {
         const response = await this.createRepostRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -189,7 +189,7 @@ export class PostsApi extends runtime.BaseAPI {
     /**
      * お気に入り登録解除
      */
-    async deleteFavoriteRaw(requestParameters: DeleteFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostResponse>> {
+    async deleteFavoriteRaw(requestParameters: DeleteFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteFavorite.');
         }
@@ -213,13 +213,13 @@ export class PostsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserPostFromJSON(jsonValue));
     }
 
     /**
      * お気に入り登録解除
      */
-    async deleteFavorite(requestParameters: DeleteFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostResponse> {
+    async deleteFavorite(requestParameters: DeleteFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPost> {
         const response = await this.deleteFavoriteRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -264,7 +264,7 @@ export class PostsApi extends runtime.BaseAPI {
     /**
      * リポスト解除
      */
-    async deleteRepostRaw(requestParameters: DeleteRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostResponse>> {
+    async deleteRepostRaw(requestParameters: DeleteRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteRepost.');
         }
@@ -288,13 +288,13 @@ export class PostsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserPostFromJSON(jsonValue));
     }
 
     /**
      * リポスト解除
      */
-    async deleteRepost(requestParameters: DeleteRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostResponse> {
+    async deleteRepost(requestParameters: DeleteRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPost> {
         const response = await this.deleteRepostRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -340,7 +340,7 @@ export class PostsApi extends runtime.BaseAPI {
     /**
      * ポストIDからポストを取得する(認証は任意)
      */
-    async getPostRaw(requestParameters: GetPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PostResponse>> {
+    async getPostRaw(requestParameters: GetPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getPost.');
         }
@@ -364,13 +364,13 @@ export class PostsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PostResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserPostFromJSON(jsonValue));
     }
 
     /**
      * ポストIDからポストを取得する(認証は任意)
      */
-    async getPost(requestParameters: GetPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PostResponse> {
+    async getPost(requestParameters: GetPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPost> {
         const response = await this.getPostRaw(requestParameters, initOverrides);
         return await response.value();
     }

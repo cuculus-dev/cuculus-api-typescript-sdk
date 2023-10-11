@@ -15,11 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
-  PostResponse,
+  UserPost,
 } from '../models/index';
 import {
-    PostResponseFromJSON,
-    PostResponseToJSON,
+    UserPostFromJSON,
+    UserPostToJSON,
 } from '../models/index';
 
 export interface GetHomeTimelineRequest {
@@ -36,7 +36,7 @@ export class TimelinesApi extends runtime.BaseAPI {
     /**
      * ホームタイムラインの取得
      */
-    async getHomeTimelineRaw(requestParameters: GetHomeTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PostResponse>>> {
+    async getHomeTimelineRaw(requestParameters: GetHomeTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserPost>>> {
         const queryParameters: any = {};
 
         if (requestParameters.limit !== undefined) {
@@ -68,13 +68,13 @@ export class TimelinesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PostResponseFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserPostFromJSON));
     }
 
     /**
      * ホームタイムラインの取得
      */
-    async getHomeTimeline(requestParameters: GetHomeTimelineRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PostResponse>> {
+    async getHomeTimeline(requestParameters: GetHomeTimelineRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserPost>> {
         const response = await this.getHomeTimelineRaw(requestParameters, initOverrides);
         return await response.value();
     }

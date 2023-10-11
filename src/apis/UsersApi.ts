@@ -15,14 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
-  PostResponse,
-  UserResponse,
+  UserPost,
+  UserProfile,
 } from '../models/index';
 import {
-    PostResponseFromJSON,
-    PostResponseToJSON,
-    UserResponseFromJSON,
-    UserResponseToJSON,
+    UserPostFromJSON,
+    UserPostToJSON,
+    UserProfileFromJSON,
+    UserProfileToJSON,
 } from '../models/index';
 
 export interface CreateFollowRequest {
@@ -135,7 +135,7 @@ export class UsersApi extends runtime.BaseAPI {
     /**
      * 自身の情報を返す
      */
-    async getMeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserResponse>> {
+    async getMeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserProfile>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -155,13 +155,13 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileFromJSON(jsonValue));
     }
 
     /**
      * 自身の情報を返す
      */
-    async getMe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserResponse> {
+    async getMe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfile> {
         const response = await this.getMeRaw(initOverrides);
         return await response.value();
     }
@@ -169,7 +169,7 @@ export class UsersApi extends runtime.BaseAPI {
     /**
      * ユーザーIDからユーザーを取得する
      */
-    async getUserByIdRaw(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserResponse>> {
+    async getUserByIdRaw(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserProfile>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserById.');
         }
@@ -185,13 +185,13 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileFromJSON(jsonValue));
     }
 
     /**
      * ユーザーIDからユーザーを取得する
      */
-    async getUserById(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserResponse> {
+    async getUserById(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfile> {
         const response = await this.getUserByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -199,7 +199,7 @@ export class UsersApi extends runtime.BaseAPI {
     /**
      * ユーザー名からユーザーを取得する
      */
-    async getUserByUsernameRaw(requestParameters: GetUserByUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserResponse>> {
+    async getUserByUsernameRaw(requestParameters: GetUserByUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserProfile>> {
         if (requestParameters.username === null || requestParameters.username === undefined) {
             throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling getUserByUsername.');
         }
@@ -215,13 +215,13 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileFromJSON(jsonValue));
     }
 
     /**
      * ユーザー名からユーザーを取得する
      */
-    async getUserByUsername(requestParameters: GetUserByUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserResponse> {
+    async getUserByUsername(requestParameters: GetUserByUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfile> {
         const response = await this.getUserByUsernameRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -229,7 +229,7 @@ export class UsersApi extends runtime.BaseAPI {
     /**
      * ユーザーIDからフォロワーを取得する
      */
-    async getUserFollowersRaw(requestParameters: GetUserFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserResponse>>> {
+    async getUserFollowersRaw(requestParameters: GetUserFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserProfile>>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserFollowers.');
         }
@@ -253,13 +253,13 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserResponseFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserProfileFromJSON));
     }
 
     /**
      * ユーザーIDからフォロワーを取得する
      */
-    async getUserFollowers(requestParameters: GetUserFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserResponse>> {
+    async getUserFollowers(requestParameters: GetUserFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserProfile>> {
         const response = await this.getUserFollowersRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -267,7 +267,7 @@ export class UsersApi extends runtime.BaseAPI {
     /**
      * ユーザーIDからフォローを取得する
      */
-    async getUserFollowingRaw(requestParameters: GetUserFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserResponse>>> {
+    async getUserFollowingRaw(requestParameters: GetUserFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserProfile>>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserFollowing.');
         }
@@ -291,13 +291,13 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserResponseFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserProfileFromJSON));
     }
 
     /**
      * ユーザーIDからフォローを取得する
      */
-    async getUserFollowing(requestParameters: GetUserFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserResponse>> {
+    async getUserFollowing(requestParameters: GetUserFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserProfile>> {
         const response = await this.getUserFollowingRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -305,7 +305,7 @@ export class UsersApi extends runtime.BaseAPI {
     /**
      * ユーザーIDから投稿を取得する
      */
-    async getUserPostsRaw(requestParameters: GetUserPostsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PostResponse>>> {
+    async getUserPostsRaw(requestParameters: GetUserPostsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserPost>>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserPosts.');
         }
@@ -329,13 +329,13 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PostResponseFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserPostFromJSON));
     }
 
     /**
      * ユーザーIDから投稿を取得する
      */
-    async getUserPosts(requestParameters: GetUserPostsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PostResponse>> {
+    async getUserPosts(requestParameters: GetUserPostsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserPost>> {
         const response = await this.getUserPostsRaw(requestParameters, initOverrides);
         return await response.value();
     }

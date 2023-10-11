@@ -17,15 +17,15 @@ import * as runtime from '../runtime';
 import type {
   Invitation,
   InvitationCodeRequest,
-  InvitationsInfo,
+  UserInvitations,
 } from '../models/index';
 import {
     InvitationFromJSON,
     InvitationToJSON,
     InvitationCodeRequestFromJSON,
     InvitationCodeRequestToJSON,
-    InvitationsInfoFromJSON,
-    InvitationsInfoToJSON,
+    UserInvitationsFromJSON,
+    UserInvitationsToJSON,
 } from '../models/index';
 
 export interface PostInvitationVerifyCodeRequest {
@@ -40,7 +40,7 @@ export class InvitationsApi extends runtime.BaseAPI {
     /**
      * 自分が発行した招待コード一覧
      */
-    async getInvitationsMeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InvitationsInfo>> {
+    async getInvitationsMeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserInvitations>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -60,13 +60,13 @@ export class InvitationsApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => InvitationsInfoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserInvitationsFromJSON(jsonValue));
     }
 
     /**
      * 自分が発行した招待コード一覧
      */
-    async getInvitationsMe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<InvitationsInfo> {
+    async getInvitationsMe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserInvitations> {
         const response = await this.getInvitationsMeRaw(initOverrides);
         return await response.value();
     }

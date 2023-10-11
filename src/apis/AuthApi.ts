@@ -15,22 +15,22 @@
 
 import * as runtime from '../runtime';
 import type {
-  AuthResponse,
+  AccessToken,
+  AuthToken,
   LoginRequest,
   PreUserRequest,
-  TokenResponse,
   UserRequest,
   VerifyCodeRequest,
 } from '../models/index';
 import {
-    AuthResponseFromJSON,
-    AuthResponseToJSON,
+    AccessTokenFromJSON,
+    AccessTokenToJSON,
+    AuthTokenFromJSON,
+    AuthTokenToJSON,
     LoginRequestFromJSON,
     LoginRequestToJSON,
     PreUserRequestFromJSON,
     PreUserRequestToJSON,
-    TokenResponseFromJSON,
-    TokenResponseToJSON,
     UserRequestFromJSON,
     UserRequestToJSON,
     VerifyCodeRequestFromJSON,
@@ -125,7 +125,7 @@ export class AuthApi extends runtime.BaseAPI {
     /**
      * ログインAPI
      */
-    async postSignInRaw(requestParameters: PostSignInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthResponse>> {
+    async postSignInRaw(requestParameters: PostSignInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthToken>> {
         if (requestParameters.loginRequest === null || requestParameters.loginRequest === undefined) {
             throw new runtime.RequiredError('loginRequest','Required parameter requestParameters.loginRequest was null or undefined when calling postSignIn.');
         }
@@ -144,13 +144,13 @@ export class AuthApi extends runtime.BaseAPI {
             body: LoginRequestToJSON(requestParameters.loginRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AuthResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuthTokenFromJSON(jsonValue));
     }
 
     /**
      * ログインAPI
      */
-    async postSignIn(requestParameters: PostSignInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthResponse> {
+    async postSignIn(requestParameters: PostSignInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthToken> {
         const response = await this.postSignInRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -183,7 +183,7 @@ export class AuthApi extends runtime.BaseAPI {
     /**
      * 本登録API
      */
-    async postSignUpRaw(requestParameters: PostSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthResponse>> {
+    async postSignUpRaw(requestParameters: PostSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthToken>> {
         if (requestParameters.userRequest === null || requestParameters.userRequest === undefined) {
             throw new runtime.RequiredError('userRequest','Required parameter requestParameters.userRequest was null or undefined when calling postSignUp.');
         }
@@ -202,13 +202,13 @@ export class AuthApi extends runtime.BaseAPI {
             body: UserRequestToJSON(requestParameters.userRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AuthResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuthTokenFromJSON(jsonValue));
     }
 
     /**
      * 本登録API
      */
-    async postSignUp(requestParameters: PostSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthResponse> {
+    async postSignUp(requestParameters: PostSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthToken> {
         const response = await this.postSignUpRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -216,7 +216,7 @@ export class AuthApi extends runtime.BaseAPI {
     /**
      * アクセストークンの再発行(現在はCookieのみ対応)
      */
-    async postTokenRefreshRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TokenResponse>> {
+    async postTokenRefreshRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AccessToken>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -228,13 +228,13 @@ export class AuthApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TokenResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AccessTokenFromJSON(jsonValue));
     }
 
     /**
      * アクセストークンの再発行(現在はCookieのみ対応)
      */
-    async postTokenRefresh(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TokenResponse> {
+    async postTokenRefresh(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AccessToken> {
         const response = await this.postTokenRefreshRaw(initOverrides);
         return await response.value();
     }
