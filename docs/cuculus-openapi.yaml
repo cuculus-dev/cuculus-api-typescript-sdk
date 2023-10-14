@@ -84,6 +84,30 @@ paths:
           in: path
           schema:
             type: number
+        - name: limit
+          required: false
+          in: query
+          example: 20
+          description: 取得件数
+          schema:
+            minimum: 1
+            maximum: 40
+            default: 20
+            type: number
+        - name: since_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: 以降
+          schema:
+            type: string
+        - name: until_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: 以前
+          schema:
+            type: string
       responses:
         '200':
           description: 投稿一覧
