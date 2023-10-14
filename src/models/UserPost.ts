@@ -33,7 +33,7 @@ import {
  */
 export interface UserPost {
     /**
-     * 
+     * 投稿ID
      * @type {string}
      * @memberof UserPost
      */

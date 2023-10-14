@@ -27,7 +27,7 @@ import {
  */
 export interface Post {
     /**
-     * 
+     * 投稿ID
      * @type {string}
      * @memberof Post
      */

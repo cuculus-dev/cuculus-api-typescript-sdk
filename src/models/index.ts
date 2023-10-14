@@ -15,6 +15,5 @@ export * from './SystemSettings';
 export * from './User';
 export * from './UserInvitations';
 export * from './UserPost';
-export * from './UserProfile';
 export * from './UserRequest';
 export * from './VerifyCodeRequest';

@@ -26,11 +26,11 @@ export interface CreatePost {
      */
     originalPostId?: string;
     /**
-     * 
+     * 本文
      * @type {string}
      * @memberof CreatePost
      */
-    text: string;
+    text?: string;
 }
 
 /**
@@ -38,7 +38,6 @@ export interface CreatePost {
  */
 export function instanceOfCreatePost(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "text" in value;
 
     return isInstance;
 }
@@ -54,7 +53,7 @@ export function CreatePostFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'originalPostId': !exists(json, 'original_post_id') ? undefined : json['original_post_id'],
-        'text': json['text'],
+        'text': !exists(json, 'text') ? undefined : json['text'],
     };
 }
 

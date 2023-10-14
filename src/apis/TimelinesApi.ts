@@ -28,6 +28,12 @@ export interface GetHomeTimelineRequest {
     untilId?: string;
 }
 
+export interface GetPublicTimelineRequest {
+    limit?: number;
+    sinceId?: string;
+    untilId?: string;
+}
+
 /**
  * 
  */
@@ -76,6 +82,52 @@ export class TimelinesApi extends runtime.BaseAPI {
      */
     async getHomeTimeline(requestParameters: GetHomeTimelineRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserPost>> {
         const response = await this.getHomeTimelineRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 全体タイムラインの取得(廃止予定)
+     */
+    async getPublicTimelineRaw(requestParameters: GetPublicTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserPost>>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.sinceId !== undefined) {
+            queryParameters['since_id'] = requestParameters.sinceId;
+        }
+
+        if (requestParameters.untilId !== undefined) {
+            queryParameters['until_id'] = requestParameters.untilId;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/v0/timelines/public`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserPostFromJSON));
+    }
+
+    /**
+     * 全体タイムラインの取得(廃止予定)
+     */
+    async getPublicTimeline(requestParameters: GetPublicTimelineRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserPost>> {
+        const response = await this.getPublicTimelineRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
