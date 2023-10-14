@@ -23,7 +23,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserProfile'
+                $ref: '#/components/schemas/User'
         '401':
           description: JWTが無効、または期限切れ
         '404':
@@ -48,7 +48,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserProfile'
+                $ref: '#/components/schemas/User'
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -69,7 +69,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserProfile'
+                $ref: '#/components/schemas/User'
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -118,7 +118,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserProfile'
+                  $ref: '#/components/schemas/User'
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -144,7 +144,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserProfile'
+                  $ref: '#/components/schemas/User'
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -652,17 +652,25 @@ paths:
         - name: limit
           required: false
           in: query
-          description: デフォルト:20
+          example: 20
+          description: 取得件数
           schema:
+            minimum: 1
+            maximum: 40
+            default: 20
             type: number
         - name: since_id
           required: false
           in: query
+          example: '26439435541307392'
+          description: 以降
           schema:
             type: string
         - name: until_id
           required: false
           in: query
+          example: '26439435541307392'
+          description: 以前
           schema:
             type: string
       responses:
@@ -677,6 +685,49 @@ paths:
       tags:
         - timelines
       security:
+        - bearer: []
+  /v0/timelines/public:
+    get:
+      operationId: getPublicTimeline
+      summary: 全体タイムラインの取得(廃止予定)
+      parameters:
+        - name: limit
+          required: false
+          in: query
+          example: 20
+          description: 取得件数
+          schema:
+            minimum: 1
+            maximum: 40
+            default: 20
+            type: number
+        - name: since_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: 以降
+          schema:
+            type: string
+        - name: until_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: 以前
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ポスト一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPost'
+      tags:
+        - timelines
+      security:
+        - {}
         - bearer: []
   /v0/invitations/verify-code:
     post:
@@ -764,38 +815,6 @@ components:
       required:
         - invitation_only
         - maintenance
-    UserProfile:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        username:
-          type: string
-        created_at:
-          format: date-time
-          type: string
-        description:
-          type: string
-        profile_image_url:
-          type: string
-        protected:
-          type: boolean
-        url:
-          type: string
-        verified:
-          type: boolean
-      required:
-        - id
-        - name
-        - username
-        - created_at
-        - description
-        - profile_image_url
-        - protected
-        - url
-        - verified
     User:
       type: object
       properties:
@@ -833,6 +852,8 @@ components:
       properties:
         id:
           type: string
+          description: 投稿ID
+          example: '26439435541307392'
         original_post_id:
           type: string
           description: リポスト|引用元ID|オリジナルには含まれません。
@@ -856,6 +877,8 @@ components:
       properties:
         id:
           type: string
+          description: 投稿ID
+          example: '26439435541307392'
         original_post_id:
           type: string
           description: リポスト|引用元ID|オリジナルには含まれません。
@@ -872,6 +895,7 @@ components:
           type: string
         original_post:
           description: リポスト元
+          example: '26439435541307392'
           allOf:
             - $ref: '#/components/schemas/Post'
         reposted:
@@ -987,10 +1011,11 @@ components:
         original_post_id:
           type: string
           description: 引用元ID
+          example: '26439435541307392'
         text:
           type: string
-      required:
-        - text
+          description: 本文
+          example: Hello, World!
     InvitationCodeRequest:
       type: object
       properties:
