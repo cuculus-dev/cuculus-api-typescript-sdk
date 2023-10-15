@@ -51,9 +51,10 @@ export interface GetUserFollowingRequest {
 
 export interface GetUserPostsRequest {
     id: number;
-    limit?: number;
+    maxId?: string;
     sinceId?: string;
-    untilId?: string;
+    minId?: string;
+    limit?: number;
 }
 
 /**
@@ -315,16 +316,20 @@ export class UsersApi extends runtime.BaseAPI {
 
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters.maxId !== undefined) {
+            queryParameters['max_id'] = requestParameters.maxId;
         }
 
         if (requestParameters.sinceId !== undefined) {
             queryParameters['since_id'] = requestParameters.sinceId;
         }
 
-        if (requestParameters.untilId !== undefined) {
-            queryParameters['until_id'] = requestParameters.untilId;
+        if (requestParameters.minId !== undefined) {
+            queryParameters['min_id'] = requestParameters.minId;
+        }
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

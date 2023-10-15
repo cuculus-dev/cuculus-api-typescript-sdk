@@ -23,15 +23,17 @@ import {
 } from '../models/index';
 
 export interface GetHomeTimelineRequest {
-    limit?: number;
+    maxId?: string;
     sinceId?: string;
-    untilId?: string;
+    minId?: string;
+    limit?: number;
 }
 
 export interface GetPublicTimelineRequest {
-    limit?: number;
+    maxId?: string;
     sinceId?: string;
-    untilId?: string;
+    minId?: string;
+    limit?: number;
 }
 
 /**
@@ -45,16 +47,20 @@ export class TimelinesApi extends runtime.BaseAPI {
     async getHomeTimelineRaw(requestParameters: GetHomeTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserPost>>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters.maxId !== undefined) {
+            queryParameters['max_id'] = requestParameters.maxId;
         }
 
         if (requestParameters.sinceId !== undefined) {
             queryParameters['since_id'] = requestParameters.sinceId;
         }
 
-        if (requestParameters.untilId !== undefined) {
-            queryParameters['until_id'] = requestParameters.untilId;
+        if (requestParameters.minId !== undefined) {
+            queryParameters['min_id'] = requestParameters.minId;
+        }
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -91,16 +97,20 @@ export class TimelinesApi extends runtime.BaseAPI {
     async getPublicTimelineRaw(requestParameters: GetPublicTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserPost>>> {
         const queryParameters: any = {};
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters.maxId !== undefined) {
+            queryParameters['max_id'] = requestParameters.maxId;
         }
 
         if (requestParameters.sinceId !== undefined) {
             queryParameters['since_id'] = requestParameters.sinceId;
         }
 
-        if (requestParameters.untilId !== undefined) {
-            queryParameters['until_id'] = requestParameters.untilId;
+        if (requestParameters.minId !== undefined) {
+            queryParameters['min_id'] = requestParameters.minId;
+        }
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
