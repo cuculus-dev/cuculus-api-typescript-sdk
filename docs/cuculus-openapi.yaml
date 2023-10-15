@@ -84,6 +84,27 @@ paths:
           in: path
           schema:
             type: number
+        - name: max_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを上限として、より小さいIDの投稿を取得します。
+          schema:
+            type: string
+        - name: since_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを下限として、それよりも大きいIDの投稿を取得します。(min_idと併用不可)
+          schema:
+            type: string
+        - name: min_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDよりも新しい直後からの投稿を取得します。(since_idと併用不可)
+          schema:
+            type: string
         - name: limit
           required: false
           in: query
@@ -94,20 +115,6 @@ paths:
             maximum: 40
             default: 20
             type: number
-        - name: since_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: 以降
-          schema:
-            type: string
-        - name: until_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: 以前
-          schema:
-            type: string
       responses:
         '200':
           description: 投稿一覧
@@ -117,6 +124,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserPost'
+        '400':
+          description: min_idとsince_idは同時に指定できません
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -673,6 +682,27 @@ paths:
       operationId: getHomeTimeline
       summary: ホームタイムラインの取得
       parameters:
+        - name: max_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを上限として、より小さいIDの投稿を取得します。
+          schema:
+            type: string
+        - name: since_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを下限として、それよりも大きいIDの投稿を取得します。(min_idと併用不可)
+          schema:
+            type: string
+        - name: min_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDよりも新しい直後からの投稿を取得します。(since_idと併用不可)
+          schema:
+            type: string
         - name: limit
           required: false
           in: query
@@ -683,20 +713,6 @@ paths:
             maximum: 40
             default: 20
             type: number
-        - name: since_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: 以降
-          schema:
-            type: string
-        - name: until_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: 以前
-          schema:
-            type: string
       responses:
         '200':
           description: ポスト一覧
@@ -706,6 +722,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserPost'
+        '400':
+          description: min_idとsince_idは同時に指定できません
       tags:
         - timelines
       security:
@@ -715,6 +733,27 @@ paths:
       operationId: getPublicTimeline
       summary: 全体タイムラインの取得(廃止予定)
       parameters:
+        - name: max_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを上限として、より小さいIDの投稿を取得します。
+          schema:
+            type: string
+        - name: since_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを下限として、それよりも大きいIDの投稿を取得します。(min_idと併用不可)
+          schema:
+            type: string
+        - name: min_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDよりも新しい直後からの投稿を取得します。(since_idと併用不可)
+          schema:
+            type: string
         - name: limit
           required: false
           in: query
@@ -725,20 +764,6 @@ paths:
             maximum: 40
             default: 20
             type: number
-        - name: since_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: 以降
-          schema:
-            type: string
-        - name: until_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: 以前
-          schema:
-            type: string
       responses:
         '200':
           description: ポスト一覧
@@ -748,6 +773,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserPost'
+        '400':
+          description: min_idとsince_idは同時に指定できません
       tags:
         - timelines
       security:
