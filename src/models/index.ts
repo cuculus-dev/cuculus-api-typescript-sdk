@@ -16,4 +16,5 @@ export * from './User';
 export * from './UserInvitations';
 export * from './UserPost';
 export * from './UserRequest';
+export * from './UserWithFollows';
 export * from './VerifyCodeRequest';
