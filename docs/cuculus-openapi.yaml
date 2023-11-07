@@ -48,7 +48,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserWithFollows'
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -69,7 +69,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserWithFollows'
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -888,6 +888,46 @@ components:
           type: string
         verified:
           type: boolean
+      required:
+        - id
+        - name
+        - username
+        - created_at
+        - description
+        - profile_image_url
+        - protected
+        - url
+        - verified
+    UserWithFollows:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        username:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        description:
+          type: string
+        profile_image_url:
+          type: string
+        protected:
+          type: boolean
+        url:
+          type: string
+        verified:
+          type: boolean
+        followers_count:
+          type: number
+          description: フォロワー数
+          example: 100
+        following_count:
+          type: number
+          description: フォロー数
+          example: 100
       required:
         - id
         - name
