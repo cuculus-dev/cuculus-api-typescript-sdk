@@ -95,14 +95,14 @@ paths:
           required: false
           in: query
           example: '26439435541307392'
-          description: このIDを下限として、それよりも大きいIDの投稿を取得します。(min_idと併用不可)
+          description: このIDを下限として、より大きいIDの投稿を取得します。(min_idと併用不可)
           schema:
             type: string
         - name: min_id
           required: false
           in: query
           example: '26439435541307392'
-          description: このIDよりも新しい直後からの投稿を取得します。(since_idと併用不可)
+          description: このIDを下限として、直後からの投稿を取得します。(since_idと併用不可)
           schema:
             type: string
         - name: limit
@@ -693,14 +693,14 @@ paths:
           required: false
           in: query
           example: '26439435541307392'
-          description: このIDを下限として、それよりも大きいIDの投稿を取得します。(min_idと併用不可)
+          description: このIDを下限として、より大きいIDの投稿を取得します。(min_idと併用不可)
           schema:
             type: string
         - name: min_id
           required: false
           in: query
           example: '26439435541307392'
-          description: このIDよりも新しい直後からの投稿を取得します。(since_idと併用不可)
+          description: このIDを下限として、直後からの投稿を取得します。(since_idと併用不可)
           schema:
             type: string
         - name: limit
@@ -744,14 +744,14 @@ paths:
           required: false
           in: query
           example: '26439435541307392'
-          description: このIDを下限として、それよりも大きいIDの投稿を取得します。(min_idと併用不可)
+          description: このIDを下限として、より大きいIDの投稿を取得します。(min_idと併用不可)
           schema:
             type: string
         - name: min_id
           required: false
           in: query
           example: '26439435541307392'
-          description: このIDよりも新しい直後からの投稿を取得します。(since_idと併用不可)
+          description: このIDを下限として、直後からの投稿を取得します。(since_idと併用不可)
           schema:
             type: string
         - name: limit
