@@ -948,6 +948,7 @@ components:
         original_post_id:
           type: string
           description: リポスト|引用元ID|オリジナルには含まれません。
+          example: '26439435541307392'
         reply_to_post_id:
           type: string
           description: リプライ先ID|リプライでない場合は含まれません。
@@ -973,6 +974,7 @@ components:
         original_post_id:
           type: string
           description: リポスト|引用元ID|オリジナルには含まれません。
+          example: '26439435541307392'
         reply_to_post_id:
           type: string
           description: リプライ先ID|リプライでない場合は含まれません。
@@ -986,7 +988,6 @@ components:
           type: string
         original_post:
           description: リポスト元
-          example: '26439435541307392'
           allOf:
             - $ref: '#/components/schemas/Post'
         reposted:
@@ -1072,6 +1073,11 @@ components:
           type: string
         auth_token:
           type: string
+        expires_at:
+          format: date-time
+          type: string
+          description: auth_tokenの有効期限
+          example: '2023-12-31T23:59:59.999Z'
       required:
         - access_token
         - auth_token
@@ -1127,6 +1133,11 @@ components:
           format: date-time
           type: string
           description: 招待コードの発行日時
+          example: '2021-01-01T00:00:00.000Z'
+        used_at:
+          format: date-time
+          type: string
+          description: 招待コードの使用日時
           example: '2021-01-01T00:00:00.000Z'
       required:
         - code
