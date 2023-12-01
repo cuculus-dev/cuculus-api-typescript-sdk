@@ -31,6 +31,12 @@ export interface Invitation {
      * @memberof Invitation
      */
     issuedAt: Date;
+    /**
+     * 招待コードの使用日時
+     * @type {Date}
+     * @memberof Invitation
+     */
+    usedAt?: Date;
 }
 
 /**
@@ -56,6 +62,7 @@ export function InvitationFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         
         'code': json['code'],
         'issuedAt': (new Date(json['issued_at'])),
+        'usedAt': !exists(json, 'used_at') ? undefined : (new Date(json['used_at'])),
     };
 }
 
@@ -70,6 +77,7 @@ export function InvitationToJSON(value?: Invitation | null): any {
         
         'code': value.code,
         'issued_at': (value.issuedAt.toISOString()),
+        'used_at': value.usedAt === undefined ? undefined : (value.usedAt.toISOString()),
     };
 }
 

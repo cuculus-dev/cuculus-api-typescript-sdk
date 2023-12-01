@@ -31,6 +31,12 @@ export interface AuthToken {
      * @memberof AuthToken
      */
     authToken: string;
+    /**
+     * auth_tokenの有効期限
+     * @type {Date}
+     * @memberof AuthToken
+     */
+    expiresAt?: Date;
 }
 
 /**
@@ -56,6 +62,7 @@ export function AuthTokenFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         
         'accessToken': json['access_token'],
         'authToken': json['auth_token'],
+        'expiresAt': !exists(json, 'expires_at') ? undefined : (new Date(json['expires_at'])),
     };
 }
 
@@ -70,6 +77,7 @@ export function AuthTokenToJSON(value?: AuthToken | null): any {
         
         'access_token': value.accessToken,
         'auth_token': value.authToken,
+        'expires_at': value.expiresAt === undefined ? undefined : (value.expiresAt.toISOString()),
     };
 }
 
