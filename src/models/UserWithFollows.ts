@@ -48,7 +48,7 @@ export interface UserWithFollows {
      * @type {string}
      * @memberof UserWithFollows
      */
-    description: string;
+    bio: string;
     /**
      * 
      * @type {string}
@@ -96,7 +96,7 @@ export function instanceOfUserWithFollows(value: object): boolean {
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "username" in value;
     isInstance = isInstance && "createdAt" in value;
-    isInstance = isInstance && "description" in value;
+    isInstance = isInstance && "bio" in value;
     isInstance = isInstance && "profileImageUrl" in value;
     isInstance = isInstance && "_protected" in value;
     isInstance = isInstance && "url" in value;
@@ -119,7 +119,7 @@ export function UserWithFollowsFromJSONTyped(json: any, ignoreDiscriminator: boo
         'name': json['name'],
         'username': json['username'],
         'createdAt': (new Date(json['created_at'])),
-        'description': json['description'],
+        'bio': json['bio'],
         'profileImageUrl': json['profile_image_url'],
         '_protected': json['protected'],
         'url': json['url'],
@@ -142,7 +142,7 @@ export function UserWithFollowsToJSON(value?: UserWithFollows | null): any {
         'name': value.name,
         'username': value.username,
         'created_at': (value.createdAt.toISOString()),
-        'description': value.description,
+        'bio': value.bio,
         'profile_image_url': value.profileImageUrl,
         'protected': value._protected,
         'url': value.url,

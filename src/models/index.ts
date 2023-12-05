@@ -12,6 +12,7 @@ export * from './LoginRequest';
 export * from './Post';
 export * from './PreUserRequest';
 export * from './SystemSettings';
+export * from './UpdateProfile';
 export * from './User';
 export * from './UserInvitations';
 export * from './UserPost';
