@@ -836,6 +836,82 @@ paths:
         - invitations
       security:
         - bearer: []
+  /v0/accounts/update-profile:
+    post:
+      operationId: updateProfile
+      summary: プロフィール更新
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfile'
+      responses:
+        '200':
+          description: プロフィールの更新に成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithFollows'
+        '401':
+          description: JWTが無効、または期限切れ
+      tags:
+        - accounts
+      security:
+        - bearer: []
+  /v0/accounts/update-profile-image:
+    post:
+      operationId: updateProfileImage
+      summary: プロフィール画像変更
+      parameters: []
+      requestBody:
+        required: true
+        description: Upload File
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: プロフィール画像の更新に成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithFollows'
+        '401':
+          description: JWTが無効、または期限切れ
+      tags:
+        - accounts
+      security:
+        - bearer: []
+  /v0/accounts/update-profile-background-image:
+    post:
+      operationId: updateProfileBackgroundImage
+      summary: ヘッダー画像更新
+      parameters: []
+      requestBody:
+        required: true
+        description: Upload File
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '401':
+          description: JWTが無効、または期限切れ
+      tags:
+        - accounts
+      security:
+        - bearer: []
 info:
   title: Cuculus API
   description: The Cuculus API description
@@ -878,7 +954,7 @@ components:
         created_at:
           format: date-time
           type: string
-        description:
+        bio:
           type: string
         profile_image_url:
           type: string
@@ -893,7 +969,7 @@ components:
         - name
         - username
         - created_at
-        - description
+        - bio
         - profile_image_url
         - protected
         - url
@@ -910,7 +986,7 @@ components:
         created_at:
           format: date-time
           type: string
-        description:
+        bio:
           type: string
         profile_image_url:
           type: string
@@ -933,7 +1009,7 @@ components:
         - name
         - username
         - created_at
-        - description
+        - bio
         - profile_image_url
         - protected
         - url
@@ -1157,3 +1233,14 @@ components:
       required:
         - remaining_invitations
         - invitations
+    UpdateProfile:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 表示名
+          example: ククルス
+        bio:
+          type: object
+          description: bio
+          example: ククルスへようこそ。
