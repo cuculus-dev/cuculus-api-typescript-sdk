@@ -863,7 +863,7 @@ paths:
   /v0/accounts/update-profile-image:
     post:
       operationId: updateProfileImage
-      summary: プロフィール画像変更
+      summary: プロフィール画像変更API。
       parameters: []
       requestBody:
         required: true
@@ -876,6 +876,13 @@ paths:
                 file:
                   type: string
                   format: binary
+                  description: |-
+                    アップロードする画像ファイル。
+                    - リミット: 1MB
+                    - 推奨サイズ: 400px x 400px
+                    - サポートされるファイルタイプ: JPEG, PNG, WEBP, GIF
+              required:
+                - file
       responses:
         '200':
           description: プロフィール画像の更新に成功
@@ -883,6 +890,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserWithFollows'
+        '400':
+          description: 無効なファイル
         '401':
           description: JWTが無効、または期限切れ
       tags:
@@ -892,7 +901,7 @@ paths:
   /v0/accounts/update-profile-background-image:
     post:
       operationId: updateProfileBackgroundImage
-      summary: ヘッダー画像更新
+      summary: ヘッダー画像更新(未実装)
       parameters: []
       requestBody:
         required: true
@@ -905,6 +914,8 @@ paths:
                 file:
                   type: string
                   format: binary
+              required:
+                - file
       responses:
         '401':
           description: JWTが無効、または期限切れ
@@ -1241,6 +1252,6 @@ components:
           description: 表示名
           example: ククルス
         bio:
-          type: object
+          type: string
           description: bio
           example: ククルスへようこそ。
