@@ -27,10 +27,10 @@ export interface UpdateProfile {
     name?: string;
     /**
      * bio
-     * @type {object}
+     * @type {string}
      * @memberof UpdateProfile
      */
-    bio?: object;
+    bio?: string;
 }
 
 /**

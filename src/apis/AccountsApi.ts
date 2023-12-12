@@ -30,11 +30,11 @@ export interface UpdateProfileRequest {
 }
 
 export interface UpdateProfileBackgroundImageRequest {
-    file?: Blob;
+    file: Blob;
 }
 
 export interface UpdateProfileImageRequest {
-    file?: Blob;
+    file: Blob;
 }
 
 /**
@@ -84,9 +84,13 @@ export class AccountsApi extends runtime.BaseAPI {
     }
 
     /**
-     * ヘッダー画像更新
+     * ヘッダー画像更新(未実装)
      */
     async updateProfileBackgroundImageRaw(requestParameters: UpdateProfileBackgroundImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.file === null || requestParameters.file === undefined) {
+            throw new runtime.RequiredError('file','Required parameter requestParameters.file was null or undefined when calling updateProfileBackgroundImage.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -131,16 +135,20 @@ export class AccountsApi extends runtime.BaseAPI {
     }
 
     /**
-     * ヘッダー画像更新
+     * ヘッダー画像更新(未実装)
      */
-    async updateProfileBackgroundImage(requestParameters: UpdateProfileBackgroundImageRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async updateProfileBackgroundImage(requestParameters: UpdateProfileBackgroundImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.updateProfileBackgroundImageRaw(requestParameters, initOverrides);
     }
 
     /**
-     * プロフィール画像変更
+     * プロフィール画像変更API。
      */
     async updateProfileImageRaw(requestParameters: UpdateProfileImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserWithFollows>> {
+        if (requestParameters.file === null || requestParameters.file === undefined) {
+            throw new runtime.RequiredError('file','Required parameter requestParameters.file was null or undefined when calling updateProfileImage.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -185,9 +193,9 @@ export class AccountsApi extends runtime.BaseAPI {
     }
 
     /**
-     * プロフィール画像変更
+     * プロフィール画像変更API。
      */
-    async updateProfileImage(requestParameters: UpdateProfileImageRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserWithFollows> {
+    async updateProfileImage(requestParameters: UpdateProfileImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserWithFollows> {
         const response = await this.updateProfileImageRaw(requestParameters, initOverrides);
         return await response.value();
     }
