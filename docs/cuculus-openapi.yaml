@@ -188,7 +188,7 @@ paths:
   /v0/users/{id}/follow:
     post:
       operationId: createFollow
-      summary: ユーザーIDをフォローする
+      summary: ユーザーIDをフォローする。またはフォローリクエストを送る
       parameters:
         - name: id
           required: true
@@ -197,7 +197,13 @@ paths:
             type: number
       responses:
         '201':
-          description: ''
+          description: ユーザーとの関係性
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Relationship'
+        '401':
+          description: JWTが無効、または期限切れ
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -220,6 +226,330 @@ paths:
           description: ユーザーが見つかりませんでした。
       tags:
         - users
+      security:
+        - bearer: []
+  /v0/users/{id}/relationship:
+    get:
+      operationId: getRelationShip
+      summary: ユーザーIDとの関係を取得する
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ユーザーとの関係性
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Relationship'
+        '400':
+          description: 自身を参照することは出来ません。
+        '401':
+          description: JWTが無効、または期限切れ
+        '404':
+          description: ユーザーが見つかりませんでした。
+      tags:
+        - users
+      security:
+        - bearer: []
+  /v0/timelines/home:
+    get:
+      operationId: getHomeTimeline
+      summary: ホームタイムラインの取得
+      parameters:
+        - name: max_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを上限として、より小さいIDの投稿を取得します。
+          schema:
+            type: string
+        - name: since_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを下限として、より大きいIDの投稿を取得します。(min_idと併用不可)
+          schema:
+            type: string
+        - name: min_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを下限として、直後からの投稿を取得します。(since_idと併用不可)
+          schema:
+            type: string
+        - name: limit
+          required: false
+          in: query
+          example: 20
+          description: 取得件数
+          schema:
+            minimum: 1
+            maximum: 40
+            default: 20
+            type: number
+      responses:
+        '200':
+          description: ポスト一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPost'
+        '400':
+          description: min_idとsince_idは同時に指定できません
+      tags:
+        - timelines
+      security:
+        - bearer: []
+  /v0/timelines/public:
+    get:
+      operationId: getPublicTimeline
+      summary: 全体タイムラインの取得(廃止予定)
+      parameters:
+        - name: max_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを上限として、より小さいIDの投稿を取得します。
+          schema:
+            type: string
+        - name: since_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを下限として、より大きいIDの投稿を取得します。(min_idと併用不可)
+          schema:
+            type: string
+        - name: min_id
+          required: false
+          in: query
+          example: '26439435541307392'
+          description: このIDを下限として、直後からの投稿を取得します。(since_idと併用不可)
+          schema:
+            type: string
+        - name: limit
+          required: false
+          in: query
+          example: 20
+          description: 取得件数
+          schema:
+            minimum: 1
+            maximum: 40
+            default: 20
+            type: number
+      responses:
+        '200':
+          description: ポスト一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPost'
+        '400':
+          description: min_idとsince_idは同時に指定できません
+      tags:
+        - timelines
+      security:
+        - {}
+        - bearer: []
+  /v0/posts:
+    post:
+      operationId: createPost
+      summary: 引用ポスト、ポスト、リプライに対応(予定)
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePost'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPost'
+        '401':
+          description: ''
+      tags:
+        - posts
+      security:
+        - bearer: []
+  /v0/posts/{id}:
+    get:
+      operationId: getPost
+      summary: ポストIDからポストを取得する(認証は任意)
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ポスト情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPost'
+        '401':
+          description: 閲覧権限がありません
+        '404':
+          description: 投稿が見つかりませんでした。
+      tags:
+        - posts
+      security:
+        - {}
+        - bearer: []
+    delete:
+      operationId: deletePost
+      summary: Postの削除
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+        '404':
+          description: 投稿が見つかりませんでした。
+      tags:
+        - posts
+      security:
+        - bearer: []
+  /v0/posts/{id}/reposted_by:
+    get:
+      operationId: getRepostedBy
+      summary: ポストIDからリポストしたアカウント一覧を返す
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: ''
+      tags:
+        - posts
+      security:
+        - {}
+        - bearer: []
+  /v0/posts/{id}/favorited_by:
+    get:
+      operationId: getFavoritedBy
+      summary: ポストIDからお気に入りしたアカウント一覧を返す
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: ''
+      tags:
+        - posts
+      security:
+        - {}
+        - bearer: []
+  /v0/posts/{id}/favorite:
+    post:
+      operationId: createFavorite
+      summary: お気に入り登録
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPost'
+        '401':
+          description: ''
+        '404':
+          description: ''
+      tags:
+        - posts
+      security:
+        - bearer: []
+    delete:
+      operationId: deleteFavorite
+      summary: お気に入り登録解除
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPost'
+        '401':
+          description: ''
+        '404':
+          description: ''
+      tags:
+        - posts
+      security:
+        - bearer: []
+  /v0/posts/{id}/repost:
+    post:
+      operationId: createRepost
+      summary: リポスト
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPost'
+        '401':
+          description: ''
+        '404':
+          description: ''
+      tags:
+        - posts
       security:
         - bearer: []
   /v0/auth/pre-sign-up:
@@ -380,22 +710,24 @@ paths:
                         status: up
                     additionalProperties:
                       type: object
+                      required:
+                        - status
                       properties:
                         status:
                           type: string
-                      additionalProperties:
-                        type: string
+                      additionalProperties: true
                     nullable: true
                   error:
                     type: object
                     example: {}
                     additionalProperties:
                       type: object
+                      required:
+                        - status
                       properties:
                         status:
                           type: string
-                      additionalProperties:
-                        type: string
+                      additionalProperties: true
                     nullable: true
                   details:
                     type: object
@@ -404,11 +736,12 @@ paths:
                         status: up
                     additionalProperties:
                       type: object
+                      required:
+                        - status
                       properties:
                         status:
                           type: string
-                      additionalProperties:
-                        type: string
+                      additionalProperties: true
         '503':
           description: The Health Check is not successful
           content:
@@ -426,11 +759,12 @@ paths:
                         status: up
                     additionalProperties:
                       type: object
+                      required:
+                        - status
                       properties:
                         status:
                           type: string
-                      additionalProperties:
-                        type: string
+                      additionalProperties: true
                     nullable: true
                   error:
                     type: object
@@ -440,11 +774,12 @@ paths:
                         message: Could not connect
                     additionalProperties:
                       type: object
+                      required:
+                        - status
                       properties:
                         status:
                           type: string
-                      additionalProperties:
-                        type: string
+                      additionalProperties: true
                     nullable: true
                   details:
                     type: object
@@ -456,330 +791,12 @@ paths:
                         message: Could not connect
                     additionalProperties:
                       type: object
+                      required:
+                        - status
                       properties:
                         status:
                           type: string
-                      additionalProperties:
-                        type: string
-  /v0/posts:
-    post:
-      operationId: createPost
-      summary: 引用ポスト、ポスト、リプライに対応(予定)
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreatePost'
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserPost'
-        '401':
-          description: ''
-      tags:
-        - posts
-      security:
-        - bearer: []
-  /v0/posts/{id}:
-    get:
-      operationId: getPost
-      summary: ポストIDからポストを取得する(認証は任意)
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ポスト情報
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserPost'
-        '404':
-          description: 投稿が見つかりませんでした。
-      tags:
-        - posts
-      security:
-        - {}
-        - bearer: []
-    delete:
-      operationId: deletePost
-      summary: Postの削除
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-        '404':
-          description: 投稿が見つかりませんでした。
-      tags:
-        - posts
-      security:
-        - bearer: []
-  /v0/posts/{id}/reposted_by:
-    get:
-      operationId: getRepostedBy
-      summary: ポストIDからリポストしたアカウント一覧を返す
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        '401':
-          description: ''
-      tags:
-        - posts
-      security:
-        - {}
-        - bearer: []
-  /v0/posts/{id}/favorited_by:
-    get:
-      operationId: getFavoritedBy
-      summary: ポストIDからお気に入りしたアカウント一覧を返す
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        '401':
-          description: ''
-      tags:
-        - posts
-      security:
-        - {}
-        - bearer: []
-  /v0/posts/{id}/favorite:
-    post:
-      operationId: createFavorite
-      summary: お気に入り登録
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserPost'
-        '401':
-          description: ''
-        '404':
-          description: ''
-      tags:
-        - posts
-      security:
-        - bearer: []
-    delete:
-      operationId: deleteFavorite
-      summary: お気に入り登録解除
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserPost'
-        '401':
-          description: ''
-        '404':
-          description: ''
-      tags:
-        - posts
-      security:
-        - bearer: []
-  /v0/posts/{id}/repost:
-    post:
-      operationId: createRepost
-      summary: リポスト
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserPost'
-        '401':
-          description: ''
-        '404':
-          description: ''
-      tags:
-        - posts
-      security:
-        - bearer: []
-    delete:
-      operationId: deleteRepost
-      summary: リポスト解除
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserPost'
-        '401':
-          description: ''
-        '404':
-          description: ''
-      tags:
-        - posts
-      security:
-        - bearer: []
-  /v0/timelines/home:
-    get:
-      operationId: getHomeTimeline
-      summary: ホームタイムラインの取得
-      parameters:
-        - name: max_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: このIDを上限として、より小さいIDの投稿を取得します。
-          schema:
-            type: string
-        - name: since_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: このIDを下限として、より大きいIDの投稿を取得します。(min_idと併用不可)
-          schema:
-            type: string
-        - name: min_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: このIDを下限として、直後からの投稿を取得します。(since_idと併用不可)
-          schema:
-            type: string
-        - name: limit
-          required: false
-          in: query
-          example: 20
-          description: 取得件数
-          schema:
-            minimum: 1
-            maximum: 40
-            default: 20
-            type: number
-      responses:
-        '200':
-          description: ポスト一覧
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserPost'
-        '400':
-          description: min_idとsince_idは同時に指定できません
-      tags:
-        - timelines
-      security:
-        - bearer: []
-  /v0/timelines/public:
-    get:
-      operationId: getPublicTimeline
-      summary: 全体タイムラインの取得(廃止予定)
-      parameters:
-        - name: max_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: このIDを上限として、より小さいIDの投稿を取得します。
-          schema:
-            type: string
-        - name: since_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: このIDを下限として、より大きいIDの投稿を取得します。(min_idと併用不可)
-          schema:
-            type: string
-        - name: min_id
-          required: false
-          in: query
-          example: '26439435541307392'
-          description: このIDを下限として、直後からの投稿を取得します。(since_idと併用不可)
-          schema:
-            type: string
-        - name: limit
-          required: false
-          in: query
-          example: 20
-          description: 取得件数
-          schema:
-            minimum: 1
-            maximum: 40
-            default: 20
-            type: number
-      responses:
-        '200':
-          description: ポスト一覧
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserPost'
-        '400':
-          description: min_idとsince_idは同時に指定できません
-      tags:
-        - timelines
-      security:
-        - {}
-        - bearer: []
+                      additionalProperties: true
   /v0/invitations/verify-code:
     post:
       operationId: postInvitationVerifyCode
@@ -969,8 +986,9 @@ components:
           type: string
         profile_image_url:
           type: string
-        protected:
+        is_private:
           type: boolean
+          description: 非公開アカウントかどうか
         url:
           type: string
         verified:
@@ -982,7 +1000,7 @@ components:
         - created_at
         - bio
         - profile_image_url
-        - protected
+        - is_private
         - url
         - verified
     UserWithFollows:
@@ -1001,8 +1019,9 @@ components:
           type: string
         profile_image_url:
           type: string
-        protected:
+        is_private:
           type: boolean
+          description: 非公開アカウントかどうか
         url:
           type: string
         verified:
@@ -1022,7 +1041,7 @@ components:
         - created_at
         - bio
         - profile_image_url
-        - protected
+        - is_private
         - url
         - verified
     Post:
@@ -1043,14 +1062,22 @@ components:
           $ref: '#/components/schemas/User'
         text:
           type: string
-          description: 本文|空orNullの場合はRTです。
+          description: 本文|リポストの場合はUndefinedになります。
         posted_at:
           format: date-time
           type: string
+        repost_count:
+          type: number
+          description: リポスト数
+        favorite_count:
+          type: number
+          description: お気に入り数
       required:
         - id
         - author
         - posted_at
+        - repost_count
+        - favorite_count
     UserPost:
       type: object
       properties:
@@ -1069,10 +1096,16 @@ components:
           $ref: '#/components/schemas/User'
         text:
           type: string
-          description: 本文|空orNullの場合はRTです。
+          description: 本文|リポストの場合はUndefinedになります。
         posted_at:
           format: date-time
           type: string
+        repost_count:
+          type: number
+          description: リポスト数
+        favorite_count:
+          type: number
+          description: お気に入り数
         original_post:
           description: リポスト元
           allOf:
@@ -1080,23 +1113,43 @@ components:
         reposted:
           type: boolean
           description: リポスト済み
-        repost_count:
-          type: number
-          description: リポスト数
         favorited:
           type: boolean
           description: お気に入り登録済み
-        favorite_count:
-          type: number
-          description: お気に入り数
       required:
         - id
         - author
         - posted_at
-        - reposted
         - repost_count
-        - favorited
         - favorite_count
+        - reposted
+        - favorited
+    Relationship:
+      type: object
+      properties:
+        id:
+          type: number
+        following:
+          type: boolean
+          description: フォロー中
+        follow_requested:
+          type: boolean
+          description: フォローリクエスト中
+      required:
+        - id
+        - following
+        - follow_requested
+    CreatePost:
+      type: object
+      properties:
+        original_post_id:
+          type: string
+          description: 引用元ID
+          example: '26439435541307392'
+        text:
+          type: string
+          description: 本文
+          example: Hello, World!
     PreUserRequest:
       type: object
       properties:
@@ -1189,17 +1242,6 @@ components:
           type: string
       required:
         - access_token
-    CreatePost:
-      type: object
-      properties:
-        original_post_id:
-          type: string
-          description: 引用元ID
-          example: '26439435541307392'
-        text:
-          type: string
-          description: 本文
-          example: Hello, World!
     InvitationCodeRequest:
       type: object
       properties:
