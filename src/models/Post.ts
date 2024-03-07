@@ -51,7 +51,7 @@ export interface Post {
      */
     author: User;
     /**
-     * 本文|空orNullの場合はRTです。
+     * 本文|リポストの場合はUndefinedになります。
      * @type {string}
      * @memberof Post
      */
@@ -62,6 +62,18 @@ export interface Post {
      * @memberof Post
      */
     postedAt: Date;
+    /**
+     * リポスト数
+     * @type {number}
+     * @memberof Post
+     */
+    repostCount: number;
+    /**
+     * お気に入り数
+     * @type {number}
+     * @memberof Post
+     */
+    favoriteCount: number;
 }
 
 /**
@@ -72,6 +84,8 @@ export function instanceOfPost(value: object): boolean {
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "author" in value;
     isInstance = isInstance && "postedAt" in value;
+    isInstance = isInstance && "repostCount" in value;
+    isInstance = isInstance && "favoriteCount" in value;
 
     return isInstance;
 }
@@ -92,6 +106,8 @@ export function PostFromJSONTyped(json: any, ignoreDiscriminator: boolean): Post
         'author': UserFromJSON(json['author']),
         'text': !exists(json, 'text') ? undefined : json['text'],
         'postedAt': (new Date(json['posted_at'])),
+        'repostCount': json['repost_count'],
+        'favoriteCount': json['favorite_count'],
     };
 }
 
@@ -110,6 +126,8 @@ export function PostToJSON(value?: Post | null): any {
         'author': UserToJSON(value.author),
         'text': value.text,
         'posted_at': (value.postedAt.toISOString()),
+        'repost_count': value.repostCount,
+        'favorite_count': value.favoriteCount,
     };
 }
 

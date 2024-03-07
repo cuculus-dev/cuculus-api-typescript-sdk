@@ -11,6 +11,7 @@ export * from './InvitationCodeRequest';
 export * from './LoginRequest';
 export * from './Post';
 export * from './PreUserRequest';
+export * from './Relationship';
 export * from './SystemSettings';
 export * from './UpdateProfile';
 export * from './User';

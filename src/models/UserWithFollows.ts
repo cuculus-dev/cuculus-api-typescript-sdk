@@ -56,11 +56,11 @@ export interface UserWithFollows {
      */
     profileImageUrl: string;
     /**
-     * 
+     * 非公開アカウントかどうか
      * @type {boolean}
      * @memberof UserWithFollows
      */
-    _protected: boolean;
+    isPrivate: boolean;
     /**
      * 
      * @type {string}
@@ -98,7 +98,7 @@ export function instanceOfUserWithFollows(value: object): boolean {
     isInstance = isInstance && "createdAt" in value;
     isInstance = isInstance && "bio" in value;
     isInstance = isInstance && "profileImageUrl" in value;
-    isInstance = isInstance && "_protected" in value;
+    isInstance = isInstance && "isPrivate" in value;
     isInstance = isInstance && "url" in value;
     isInstance = isInstance && "verified" in value;
 
@@ -121,7 +121,7 @@ export function UserWithFollowsFromJSONTyped(json: any, ignoreDiscriminator: boo
         'createdAt': (new Date(json['created_at'])),
         'bio': json['bio'],
         'profileImageUrl': json['profile_image_url'],
-        '_protected': json['protected'],
+        'isPrivate': json['is_private'],
         'url': json['url'],
         'verified': json['verified'],
         'followersCount': !exists(json, 'followers_count') ? undefined : json['followers_count'],
@@ -144,7 +144,7 @@ export function UserWithFollowsToJSON(value?: UserWithFollows | null): any {
         'created_at': (value.createdAt.toISOString()),
         'bio': value.bio,
         'profile_image_url': value.profileImageUrl,
-        'protected': value._protected,
+        'is_private': value.isPrivate,
         'url': value.url,
         'verified': value.verified,
         'followers_count': value.followersCount,

@@ -48,10 +48,6 @@ export interface DeletePostRequest {
     id: string;
 }
 
-export interface DeleteRepostRequest {
-    id: string;
-}
-
 export interface GetFavoritedByRequest {
     id: string;
 }
@@ -259,44 +255,6 @@ export class PostsApi extends runtime.BaseAPI {
      */
     async deletePost(requestParameters: DeletePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deletePostRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * リポスト解除
-     */
-    async deleteRepostRaw(requestParameters: DeleteRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteRepost.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("bearer", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request({
-            path: `/v0/posts/{id}/repost`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserPostFromJSON(jsonValue));
-    }
-
-    /**
-     * リポスト解除
-     */
-    async deleteRepost(requestParameters: DeleteRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPost> {
-        const response = await this.deleteRepostRaw(requestParameters, initOverrides);
-        return await response.value();
     }
 
     /**

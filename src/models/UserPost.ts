@@ -57,7 +57,7 @@ export interface UserPost {
      */
     author: User;
     /**
-     * 本文|空orNullの場合はRTです。
+     * 本文|リポストの場合はUndefinedになります。
      * @type {string}
      * @memberof UserPost
      */
@@ -68,6 +68,18 @@ export interface UserPost {
      * @memberof UserPost
      */
     postedAt: Date;
+    /**
+     * リポスト数
+     * @type {number}
+     * @memberof UserPost
+     */
+    repostCount: number;
+    /**
+     * お気に入り数
+     * @type {number}
+     * @memberof UserPost
+     */
+    favoriteCount: number;
     /**
      * 
      * @type {Post}
@@ -81,23 +93,11 @@ export interface UserPost {
      */
     reposted: boolean;
     /**
-     * リポスト数
-     * @type {number}
-     * @memberof UserPost
-     */
-    repostCount: number;
-    /**
      * お気に入り登録済み
      * @type {boolean}
      * @memberof UserPost
      */
     favorited: boolean;
-    /**
-     * お気に入り数
-     * @type {number}
-     * @memberof UserPost
-     */
-    favoriteCount: number;
 }
 
 /**
@@ -108,10 +108,10 @@ export function instanceOfUserPost(value: object): boolean {
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "author" in value;
     isInstance = isInstance && "postedAt" in value;
-    isInstance = isInstance && "reposted" in value;
     isInstance = isInstance && "repostCount" in value;
-    isInstance = isInstance && "favorited" in value;
     isInstance = isInstance && "favoriteCount" in value;
+    isInstance = isInstance && "reposted" in value;
+    isInstance = isInstance && "favorited" in value;
 
     return isInstance;
 }
@@ -132,11 +132,11 @@ export function UserPostFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'author': UserFromJSON(json['author']),
         'text': !exists(json, 'text') ? undefined : json['text'],
         'postedAt': (new Date(json['posted_at'])),
+        'repostCount': json['repost_count'],
+        'favoriteCount': json['favorite_count'],
         'originalPost': !exists(json, 'original_post') ? undefined : PostFromJSON(json['original_post']),
         'reposted': json['reposted'],
-        'repostCount': json['repost_count'],
         'favorited': json['favorited'],
-        'favoriteCount': json['favorite_count'],
     };
 }
 
@@ -155,11 +155,11 @@ export function UserPostToJSON(value?: UserPost | null): any {
         'author': UserToJSON(value.author),
         'text': value.text,
         'posted_at': (value.postedAt.toISOString()),
+        'repost_count': value.repostCount,
+        'favorite_count': value.favoriteCount,
         'original_post': PostToJSON(value.originalPost),
         'reposted': value.reposted,
-        'repost_count': value.repostCount,
         'favorited': value.favorited,
-        'favorite_count': value.favoriteCount,
     };
 }
 

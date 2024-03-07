@@ -15,11 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
+  Relationship,
   User,
   UserPost,
   UserWithFollows,
 } from '../models/index';
 import {
+    RelationshipFromJSON,
+    RelationshipToJSON,
     UserFromJSON,
     UserToJSON,
     UserPostFromJSON,
@@ -33,6 +36,10 @@ export interface CreateFollowRequest {
 }
 
 export interface DeleteFollowRequest {
+    id: number;
+}
+
+export interface GetRelationShipRequest {
     id: number;
 }
 
@@ -66,9 +73,9 @@ export interface GetUserPostsRequest {
 export class UsersApi extends runtime.BaseAPI {
 
     /**
-     * ユーザーIDをフォローする
+     * ユーザーIDをフォローする。またはフォローリクエストを送る
      */
-    async createFollowRaw(requestParameters: CreateFollowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async createFollowRaw(requestParameters: CreateFollowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Relationship>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling createFollow.');
         }
@@ -92,14 +99,15 @@ export class UsersApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => RelationshipFromJSON(jsonValue));
     }
 
     /**
-     * ユーザーIDをフォローする
+     * ユーザーIDをフォローする。またはフォローリクエストを送る
      */
-    async createFollow(requestParameters: CreateFollowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.createFollowRaw(requestParameters, initOverrides);
+    async createFollow(requestParameters: CreateFollowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Relationship> {
+        const response = await this.createFollowRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -170,6 +178,44 @@ export class UsersApi extends runtime.BaseAPI {
      */
     async getMe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
         const response = await this.getMeRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * ユーザーIDとの関係を取得する
+     */
+    async getRelationShipRaw(requestParameters: GetRelationShipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Relationship>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getRelationShip.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/v0/users/{id}/relationship`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => RelationshipFromJSON(jsonValue));
+    }
+
+    /**
+     * ユーザーIDとの関係を取得する
+     */
+    async getRelationShip(requestParameters: GetRelationShipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Relationship> {
+        const response = await this.getRelationShipRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

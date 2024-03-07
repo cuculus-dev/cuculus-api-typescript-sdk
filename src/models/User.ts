@@ -56,11 +56,11 @@ export interface User {
      */
     profileImageUrl: string;
     /**
-     * 
+     * 非公開アカウントかどうか
      * @type {boolean}
      * @memberof User
      */
-    _protected: boolean;
+    isPrivate: boolean;
     /**
      * 
      * @type {string}
@@ -86,7 +86,7 @@ export function instanceOfUser(value: object): boolean {
     isInstance = isInstance && "createdAt" in value;
     isInstance = isInstance && "bio" in value;
     isInstance = isInstance && "profileImageUrl" in value;
-    isInstance = isInstance && "_protected" in value;
+    isInstance = isInstance && "isPrivate" in value;
     isInstance = isInstance && "url" in value;
     isInstance = isInstance && "verified" in value;
 
@@ -109,7 +109,7 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'createdAt': (new Date(json['created_at'])),
         'bio': json['bio'],
         'profileImageUrl': json['profile_image_url'],
-        '_protected': json['protected'],
+        'isPrivate': json['is_private'],
         'url': json['url'],
         'verified': json['verified'],
     };
@@ -130,7 +130,7 @@ export function UserToJSON(value?: User | null): any {
         'created_at': (value.createdAt.toISOString()),
         'bio': value.bio,
         'profile_image_url': value.profileImageUrl,
-        'protected': value._protected,
+        'is_private': value.isPrivate,
         'url': value.url,
         'verified': value.verified,
     };
