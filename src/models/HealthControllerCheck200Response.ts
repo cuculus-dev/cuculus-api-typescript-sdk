@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 import type { HealthControllerCheck200ResponseInfoValue } from './HealthControllerCheck200ResponseInfoValue';
 import {
     HealthControllerCheck200ResponseInfoValueFromJSON,
@@ -37,13 +37,13 @@ export interface HealthControllerCheck200Response {
      * @type {{ [key: string]: HealthControllerCheck200ResponseInfoValue; }}
      * @memberof HealthControllerCheck200Response
      */
-    info?: { [key: string]: HealthControllerCheck200ResponseInfoValue; };
+    info?: { [key: string]: HealthControllerCheck200ResponseInfoValue; } | null;
     /**
      * 
      * @type {{ [key: string]: HealthControllerCheck200ResponseInfoValue; }}
      * @memberof HealthControllerCheck200Response
      */
-    error?: { [key: string]: HealthControllerCheck200ResponseInfoValue; };
+    error?: { [key: string]: HealthControllerCheck200ResponseInfoValue; } | null;
     /**
      * 
      * @type {{ [key: string]: HealthControllerCheck200ResponseInfoValue; }}
@@ -56,7 +56,9 @@ export interface HealthControllerCheck200Response {
  * Check if a given object implements the HealthControllerCheck200Response interface.
  */
 export function instanceOfHealthControllerCheck200Response(value: object): boolean {
-    return true;
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function HealthControllerCheck200ResponseFromJSON(json: any): HealthControllerCheck200Response {
@@ -64,28 +66,31 @@ export function HealthControllerCheck200ResponseFromJSON(json: any): HealthContr
 }
 
 export function HealthControllerCheck200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): HealthControllerCheck200Response {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'status': json['status'] == null ? undefined : json['status'],
-        'info': json['info'] == null ? undefined : (mapValues(json['info'], HealthControllerCheck200ResponseInfoValueFromJSON)),
-        'error': json['error'] == null ? undefined : (mapValues(json['error'], HealthControllerCheck200ResponseInfoValueFromJSON)),
-        'details': json['details'] == null ? undefined : (mapValues(json['details'], HealthControllerCheck200ResponseInfoValueFromJSON)),
+        'status': !exists(json, 'status') ? undefined : json['status'],
+        'info': !exists(json, 'info') ? undefined : (json['info'] === null ? null : mapValues(json['info'], HealthControllerCheck200ResponseInfoValueFromJSON)),
+        'error': !exists(json, 'error') ? undefined : (json['error'] === null ? null : mapValues(json['error'], HealthControllerCheck200ResponseInfoValueFromJSON)),
+        'details': !exists(json, 'details') ? undefined : (mapValues(json['details'], HealthControllerCheck200ResponseInfoValueFromJSON)),
     };
 }
 
 export function HealthControllerCheck200ResponseToJSON(value?: HealthControllerCheck200Response | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'status': value['status'],
-        'info': value['info'] == null ? undefined : (mapValues(value['info'], HealthControllerCheck200ResponseInfoValueToJSON)),
-        'error': value['error'] == null ? undefined : (mapValues(value['error'], HealthControllerCheck200ResponseInfoValueToJSON)),
-        'details': value['details'] == null ? undefined : (mapValues(value['details'], HealthControllerCheck200ResponseInfoValueToJSON)),
+        'status': value.status,
+        'info': value.info === undefined ? undefined : (value.info === null ? null : mapValues(value.info, HealthControllerCheck200ResponseInfoValueToJSON)),
+        'error': value.error === undefined ? undefined : (value.error === null ? null : mapValues(value.error, HealthControllerCheck200ResponseInfoValueToJSON)),
+        'details': value.details === undefined ? undefined : (mapValues(value.details, HealthControllerCheck200ResponseInfoValueToJSON)),
     };
 }
 

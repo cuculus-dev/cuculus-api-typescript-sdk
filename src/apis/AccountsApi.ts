@@ -46,11 +46,8 @@ export class AccountsApi extends runtime.BaseAPI {
      * プロフィール更新
      */
     async updateProfileRaw(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserWithFollows>> {
-        if (requestParameters['updateProfile'] == null) {
-            throw new runtime.RequiredError(
-                'updateProfile',
-                'Required parameter "updateProfile" was null or undefined when calling updateProfile().'
-            );
+        if (requestParameters.updateProfile === null || requestParameters.updateProfile === undefined) {
+            throw new runtime.RequiredError('updateProfile','Required parameter requestParameters.updateProfile was null or undefined when calling updateProfile.');
         }
 
         const queryParameters: any = {};
@@ -72,7 +69,7 @@ export class AccountsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateProfileToJSON(requestParameters['updateProfile']),
+            body: UpdateProfileToJSON(requestParameters.updateProfile),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserWithFollowsFromJSON(jsonValue));
@@ -90,11 +87,8 @@ export class AccountsApi extends runtime.BaseAPI {
      * ヘッダー画像更新(未実装)
      */
     async updateProfileBackgroundImageRaw(requestParameters: UpdateProfileBackgroundImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['file'] == null) {
-            throw new runtime.RequiredError(
-                'file',
-                'Required parameter "file" was null or undefined when calling updateProfileBackgroundImage().'
-            );
+        if (requestParameters.file === null || requestParameters.file === undefined) {
+            throw new runtime.RequiredError('file','Required parameter requestParameters.file was null or undefined when calling updateProfileBackgroundImage.');
         }
 
         const queryParameters: any = {};
@@ -125,8 +119,8 @@ export class AccountsApi extends runtime.BaseAPI {
             formParams = new URLSearchParams();
         }
 
-        if (requestParameters['file'] != null) {
-            formParams.append('file', requestParameters['file'] as any);
+        if (requestParameters.file !== undefined) {
+            formParams.append('file', requestParameters.file as any);
         }
 
         const response = await this.request({
@@ -151,11 +145,8 @@ export class AccountsApi extends runtime.BaseAPI {
      * プロフィール画像変更API。
      */
     async updateProfileImageRaw(requestParameters: UpdateProfileImageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserWithFollows>> {
-        if (requestParameters['file'] == null) {
-            throw new runtime.RequiredError(
-                'file',
-                'Required parameter "file" was null or undefined when calling updateProfileImage().'
-            );
+        if (requestParameters.file === null || requestParameters.file === undefined) {
+            throw new runtime.RequiredError('file','Required parameter requestParameters.file was null or undefined when calling updateProfileImage.');
         }
 
         const queryParameters: any = {};
@@ -186,8 +177,8 @@ export class AccountsApi extends runtime.BaseAPI {
             formParams = new URLSearchParams();
         }
 
-        if (requestParameters['file'] != null) {
-            formParams.append('file', requestParameters['file'] as any);
+        if (requestParameters.file !== undefined) {
+            formParams.append('file', requestParameters.file as any);
         }
 
         const response = await this.request({

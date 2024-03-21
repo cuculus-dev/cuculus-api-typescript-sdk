@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -37,9 +37,11 @@ export interface LoginRequest {
  * Check if a given object implements the LoginRequest interface.
  */
 export function instanceOfLoginRequest(value: object): boolean {
-    if (!('username' in value)) return false;
-    if (!('password' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "username" in value;
+    isInstance = isInstance && "password" in value;
+
+    return isInstance;
 }
 
 export function LoginRequestFromJSON(json: any): LoginRequest {
@@ -47,7 +49,7 @@ export function LoginRequestFromJSON(json: any): LoginRequest {
 }
 
 export function LoginRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): LoginRequest {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
@@ -58,13 +60,16 @@ export function LoginRequestFromJSONTyped(json: any, ignoreDiscriminator: boolea
 }
 
 export function LoginRequestToJSON(value?: LoginRequest | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'username': value['username'],
-        'password': value['password'],
+        'username': value.username,
+        'password': value.password,
     };
 }
 

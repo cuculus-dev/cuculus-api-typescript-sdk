@@ -69,11 +69,8 @@ export class PostsApi extends runtime.BaseAPI {
      * お気に入り登録
      */
     async createFavoriteRaw(requestParameters: CreateFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling createFavorite().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling createFavorite.');
         }
 
         const queryParameters: any = {};
@@ -89,7 +86,7 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/posts/{id}/favorite`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/posts/{id}/favorite`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -110,11 +107,8 @@ export class PostsApi extends runtime.BaseAPI {
      * 引用ポスト、ポスト、リプライに対応(予定)
      */
     async createPostRaw(requestParameters: CreatePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
-        if (requestParameters['createPost'] == null) {
-            throw new runtime.RequiredError(
-                'createPost',
-                'Required parameter "createPost" was null or undefined when calling createPost().'
-            );
+        if (requestParameters.createPost === null || requestParameters.createPost === undefined) {
+            throw new runtime.RequiredError('createPost','Required parameter requestParameters.createPost was null or undefined when calling createPost.');
         }
 
         const queryParameters: any = {};
@@ -136,7 +130,7 @@ export class PostsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreatePostToJSON(requestParameters['createPost']),
+            body: CreatePostToJSON(requestParameters.createPost),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UserPostFromJSON(jsonValue));
@@ -154,11 +148,8 @@ export class PostsApi extends runtime.BaseAPI {
      * リポスト
      */
     async createRepostRaw(requestParameters: CreateRepostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling createRepost().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling createRepost.');
         }
 
         const queryParameters: any = {};
@@ -174,7 +165,7 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/posts/{id}/repost`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/posts/{id}/repost`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -195,11 +186,8 @@ export class PostsApi extends runtime.BaseAPI {
      * お気に入り登録解除
      */
     async deleteFavoriteRaw(requestParameters: DeleteFavoriteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling deleteFavorite().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteFavorite.');
         }
 
         const queryParameters: any = {};
@@ -215,7 +203,7 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/posts/{id}/favorite`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/posts/{id}/favorite`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -236,11 +224,8 @@ export class PostsApi extends runtime.BaseAPI {
      * Postの削除
      */
     async deletePostRaw(requestParameters: DeletePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling deletePost().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deletePost.');
         }
 
         const queryParameters: any = {};
@@ -256,7 +241,7 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/posts/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/posts/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -276,11 +261,8 @@ export class PostsApi extends runtime.BaseAPI {
      * ポストIDからお気に入りしたアカウント一覧を返す
      */
     async getFavoritedByRaw(requestParameters: GetFavoritedByRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<User>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getFavoritedBy().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getFavoritedBy.');
         }
 
         const queryParameters: any = {};
@@ -296,7 +278,7 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/posts/{id}/favorited_by`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/posts/{id}/favorited_by`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -317,11 +299,8 @@ export class PostsApi extends runtime.BaseAPI {
      * ポストIDからポストを取得する(認証は任意)
      */
     async getPostRaw(requestParameters: GetPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPost>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getPost().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getPost.');
         }
 
         const queryParameters: any = {};
@@ -337,7 +316,7 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/posts/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/posts/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -358,11 +337,8 @@ export class PostsApi extends runtime.BaseAPI {
      * ポストIDからリポストしたアカウント一覧を返す
      */
     async getRepostedByRaw(requestParameters: GetRepostedByRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<User>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getRepostedBy().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getRepostedBy.');
         }
 
         const queryParameters: any = {};
@@ -378,7 +354,7 @@ export class PostsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/posts/{id}/reposted_by`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/posts/{id}/reposted_by`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

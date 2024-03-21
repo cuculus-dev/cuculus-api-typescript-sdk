@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -43,9 +43,11 @@ export interface Invitation {
  * Check if a given object implements the Invitation interface.
  */
 export function instanceOfInvitation(value: object): boolean {
-    if (!('code' in value)) return false;
-    if (!('issuedAt' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "code" in value;
+    isInstance = isInstance && "issuedAt" in value;
+
+    return isInstance;
 }
 
 export function InvitationFromJSON(json: any): Invitation {
@@ -53,26 +55,29 @@ export function InvitationFromJSON(json: any): Invitation {
 }
 
 export function InvitationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Invitation {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'code': json['code'],
         'issuedAt': (new Date(json['issued_at'])),
-        'usedAt': json['used_at'] == null ? undefined : (new Date(json['used_at'])),
+        'usedAt': !exists(json, 'used_at') ? undefined : (new Date(json['used_at'])),
     };
 }
 
 export function InvitationToJSON(value?: Invitation | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'code': value['code'],
-        'issued_at': ((value['issuedAt']).toISOString()),
-        'used_at': value['usedAt'] == null ? undefined : ((value['usedAt']).toISOString()),
+        'code': value.code,
+        'issued_at': (value.issuedAt.toISOString()),
+        'used_at': value.usedAt === undefined ? undefined : (value.usedAt.toISOString()),
     };
 }
 

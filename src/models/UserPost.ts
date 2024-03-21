@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 import type { Post } from './Post';
 import {
     PostFromJSON,
@@ -81,7 +81,7 @@ export interface UserPost {
      */
     favoriteCount: number;
     /**
-     * リポスト元
+     * 
      * @type {Post}
      * @memberof UserPost
      */
@@ -104,14 +104,16 @@ export interface UserPost {
  * Check if a given object implements the UserPost interface.
  */
 export function instanceOfUserPost(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('author' in value)) return false;
-    if (!('postedAt' in value)) return false;
-    if (!('repostCount' in value)) return false;
-    if (!('favoriteCount' in value)) return false;
-    if (!('reposted' in value)) return false;
-    if (!('favorited' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "author" in value;
+    isInstance = isInstance && "postedAt" in value;
+    isInstance = isInstance && "repostCount" in value;
+    isInstance = isInstance && "favoriteCount" in value;
+    isInstance = isInstance && "reposted" in value;
+    isInstance = isInstance && "favorited" in value;
+
+    return isInstance;
 }
 
 export function UserPostFromJSON(json: any): UserPost {
@@ -119,42 +121,45 @@ export function UserPostFromJSON(json: any): UserPost {
 }
 
 export function UserPostFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserPost {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'id': json['id'],
-        'originalPostId': json['original_post_id'] == null ? undefined : json['original_post_id'],
-        'replyToPostId': json['reply_to_post_id'] == null ? undefined : json['reply_to_post_id'],
+        'originalPostId': !exists(json, 'original_post_id') ? undefined : json['original_post_id'],
+        'replyToPostId': !exists(json, 'reply_to_post_id') ? undefined : json['reply_to_post_id'],
         'author': UserFromJSON(json['author']),
-        'text': json['text'] == null ? undefined : json['text'],
+        'text': !exists(json, 'text') ? undefined : json['text'],
         'postedAt': (new Date(json['posted_at'])),
         'repostCount': json['repost_count'],
         'favoriteCount': json['favorite_count'],
-        'originalPost': json['original_post'] == null ? undefined : PostFromJSON(json['original_post']),
+        'originalPost': !exists(json, 'original_post') ? undefined : PostFromJSON(json['original_post']),
         'reposted': json['reposted'],
         'favorited': json['favorited'],
     };
 }
 
 export function UserPostToJSON(value?: UserPost | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'id': value['id'],
-        'original_post_id': value['originalPostId'],
-        'reply_to_post_id': value['replyToPostId'],
-        'author': UserToJSON(value['author']),
-        'text': value['text'],
-        'posted_at': ((value['postedAt']).toISOString()),
-        'repost_count': value['repostCount'],
-        'favorite_count': value['favoriteCount'],
-        'original_post': PostToJSON(value['originalPost']),
-        'reposted': value['reposted'],
-        'favorited': value['favorited'],
+        'id': value.id,
+        'original_post_id': value.originalPostId,
+        'reply_to_post_id': value.replyToPostId,
+        'author': UserToJSON(value.author),
+        'text': value.text,
+        'posted_at': (value.postedAt.toISOString()),
+        'repost_count': value.repostCount,
+        'favorite_count': value.favoriteCount,
+        'original_post': PostToJSON(value.originalPost),
+        'reposted': value.reposted,
+        'favorited': value.favorited,
     };
 }
 

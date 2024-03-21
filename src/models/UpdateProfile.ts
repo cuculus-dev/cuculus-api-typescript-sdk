@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -37,7 +37,9 @@ export interface UpdateProfile {
  * Check if a given object implements the UpdateProfile interface.
  */
 export function instanceOfUpdateProfile(value: object): boolean {
-    return true;
+    let isInstance = true;
+
+    return isInstance;
 }
 
 export function UpdateProfileFromJSON(json: any): UpdateProfile {
@@ -45,24 +47,27 @@ export function UpdateProfileFromJSON(json: any): UpdateProfile {
 }
 
 export function UpdateProfileFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateProfile {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'name': json['name'] == null ? undefined : json['name'],
-        'bio': json['bio'] == null ? undefined : json['bio'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'bio': !exists(json, 'bio') ? undefined : json['bio'],
     };
 }
 
 export function UpdateProfileToJSON(value?: UpdateProfile | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'name': value['name'],
-        'bio': value['bio'],
+        'name': value.name,
+        'bio': value.bio,
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 import type { User } from './User';
 import {
     UserFromJSON,
@@ -44,9 +44,11 @@ export interface FollowList {
  * Check if a given object implements the FollowList interface.
  */
 export function instanceOfFollowList(value: object): boolean {
-    if (!('users' in value)) return false;
-    if (!('nextUntil' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "users" in value;
+    isInstance = isInstance && "nextUntil" in value;
+
+    return isInstance;
 }
 
 export function FollowListFromJSON(json: any): FollowList {
@@ -54,7 +56,7 @@ export function FollowListFromJSON(json: any): FollowList {
 }
 
 export function FollowListFromJSONTyped(json: any, ignoreDiscriminator: boolean): FollowList {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
@@ -65,13 +67,16 @@ export function FollowListFromJSONTyped(json: any, ignoreDiscriminator: boolean)
 }
 
 export function FollowListToJSON(value?: FollowList | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'users': ((value['users'] as Array<any>).map(UserToJSON)),
-        'next_until': ((value['nextUntil']).toISOString()),
+        'users': ((value.users as Array<any>).map(UserToJSON)),
+        'next_until': (value.nextUntil.toISOString()),
     };
 }
 

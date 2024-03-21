@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -97,17 +97,19 @@ export interface UserWithFollows {
  * Check if a given object implements the UserWithFollows interface.
  */
 export function instanceOfUserWithFollows(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('username' in value)) return false;
-    if (!('createdAt' in value)) return false;
-    if (!('bio' in value)) return false;
-    if (!('profileImageUrl' in value)) return false;
-    if (!('isPrivate' in value)) return false;
-    if (!('url' in value)) return false;
-    if (!('verified' in value)) return false;
-    if (!('isRemote' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "username" in value;
+    isInstance = isInstance && "createdAt" in value;
+    isInstance = isInstance && "bio" in value;
+    isInstance = isInstance && "profileImageUrl" in value;
+    isInstance = isInstance && "isPrivate" in value;
+    isInstance = isInstance && "url" in value;
+    isInstance = isInstance && "verified" in value;
+    isInstance = isInstance && "isRemote" in value;
+
+    return isInstance;
 }
 
 export function UserWithFollowsFromJSON(json: any): UserWithFollows {
@@ -115,7 +117,7 @@ export function UserWithFollowsFromJSON(json: any): UserWithFollows {
 }
 
 export function UserWithFollowsFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserWithFollows {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
@@ -130,29 +132,32 @@ export function UserWithFollowsFromJSONTyped(json: any, ignoreDiscriminator: boo
         'url': json['url'],
         'verified': json['verified'],
         'isRemote': json['is_remote'],
-        'followersCount': json['followers_count'] == null ? undefined : json['followers_count'],
-        'followingCount': json['following_count'] == null ? undefined : json['following_count'],
+        'followersCount': !exists(json, 'followers_count') ? undefined : json['followers_count'],
+        'followingCount': !exists(json, 'following_count') ? undefined : json['following_count'],
     };
 }
 
 export function UserWithFollowsToJSON(value?: UserWithFollows | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'id': value['id'],
-        'name': value['name'],
-        'username': value['username'],
-        'created_at': ((value['createdAt']).toISOString()),
-        'bio': value['bio'],
-        'profile_image_url': value['profileImageUrl'],
-        'is_private': value['isPrivate'],
-        'url': value['url'],
-        'verified': value['verified'],
-        'is_remote': value['isRemote'],
-        'followers_count': value['followersCount'],
-        'following_count': value['followingCount'],
+        'id': value.id,
+        'name': value.name,
+        'username': value.username,
+        'created_at': (value.createdAt.toISOString()),
+        'bio': value.bio,
+        'profile_image_url': value.profileImageUrl,
+        'is_private': value.isPrivate,
+        'url': value.url,
+        'verified': value.verified,
+        'is_remote': value.isRemote,
+        'followers_count': value.followersCount,
+        'following_count': value.followingCount,
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -37,9 +37,11 @@ export interface SystemSettings {
  * Check if a given object implements the SystemSettings interface.
  */
 export function instanceOfSystemSettings(value: object): boolean {
-    if (!('invitationOnly' in value)) return false;
-    if (!('maintenance' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "invitationOnly" in value;
+    isInstance = isInstance && "maintenance" in value;
+
+    return isInstance;
 }
 
 export function SystemSettingsFromJSON(json: any): SystemSettings {
@@ -47,7 +49,7 @@ export function SystemSettingsFromJSON(json: any): SystemSettings {
 }
 
 export function SystemSettingsFromJSONTyped(json: any, ignoreDiscriminator: boolean): SystemSettings {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
@@ -58,13 +60,16 @@ export function SystemSettingsFromJSONTyped(json: any, ignoreDiscriminator: bool
 }
 
 export function SystemSettingsToJSON(value?: SystemSettings | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'invitation_only': value['invitationOnly'],
-        'maintenance': value['maintenance'],
+        'invitation_only': value.invitationOnly,
+        'maintenance': value.maintenance,
     };
 }
 

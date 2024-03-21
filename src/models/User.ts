@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -85,17 +85,19 @@ export interface User {
  * Check if a given object implements the User interface.
  */
 export function instanceOfUser(value: object): boolean {
-    if (!('id' in value)) return false;
-    if (!('name' in value)) return false;
-    if (!('username' in value)) return false;
-    if (!('createdAt' in value)) return false;
-    if (!('bio' in value)) return false;
-    if (!('profileImageUrl' in value)) return false;
-    if (!('isPrivate' in value)) return false;
-    if (!('url' in value)) return false;
-    if (!('verified' in value)) return false;
-    if (!('isRemote' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "username" in value;
+    isInstance = isInstance && "createdAt" in value;
+    isInstance = isInstance && "bio" in value;
+    isInstance = isInstance && "profileImageUrl" in value;
+    isInstance = isInstance && "isPrivate" in value;
+    isInstance = isInstance && "url" in value;
+    isInstance = isInstance && "verified" in value;
+    isInstance = isInstance && "isRemote" in value;
+
+    return isInstance;
 }
 
 export function UserFromJSON(json: any): User {
@@ -103,7 +105,7 @@ export function UserFromJSON(json: any): User {
 }
 
 export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
@@ -122,21 +124,24 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
 }
 
 export function UserToJSON(value?: User | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'id': value['id'],
-        'name': value['name'],
-        'username': value['username'],
-        'created_at': ((value['createdAt']).toISOString()),
-        'bio': value['bio'],
-        'profile_image_url': value['profileImageUrl'],
-        'is_private': value['isPrivate'],
-        'url': value['url'],
-        'verified': value['verified'],
-        'is_remote': value['isRemote'],
+        'id': value.id,
+        'name': value.name,
+        'username': value.username,
+        'created_at': (value.createdAt.toISOString()),
+        'bio': value.bio,
+        'profile_image_url': value.profileImageUrl,
+        'is_private': value.isPrivate,
+        'url': value.url,
+        'verified': value.verified,
+        'is_remote': value.isRemote,
     };
 }
 

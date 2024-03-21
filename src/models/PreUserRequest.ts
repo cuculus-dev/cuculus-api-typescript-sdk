@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -37,9 +37,11 @@ export interface PreUserRequest {
  * Check if a given object implements the PreUserRequest interface.
  */
 export function instanceOfPreUserRequest(value: object): boolean {
-    if (!('name' in value)) return false;
-    if (!('email' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "email" in value;
+
+    return isInstance;
 }
 
 export function PreUserRequestFromJSON(json: any): PreUserRequest {
@@ -47,7 +49,7 @@ export function PreUserRequestFromJSON(json: any): PreUserRequest {
 }
 
 export function PreUserRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): PreUserRequest {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
@@ -58,13 +60,16 @@ export function PreUserRequestFromJSONTyped(json: any, ignoreDiscriminator: bool
 }
 
 export function PreUserRequestToJSON(value?: PreUserRequest | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'name': value['name'],
-        'email': value['email'],
+        'name': value.name,
+        'email': value.email,
     };
 }
 

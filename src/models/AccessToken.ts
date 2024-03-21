@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -31,8 +31,10 @@ export interface AccessToken {
  * Check if a given object implements the AccessToken interface.
  */
 export function instanceOfAccessToken(value: object): boolean {
-    if (!('accessToken' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "accessToken" in value;
+
+    return isInstance;
 }
 
 export function AccessTokenFromJSON(json: any): AccessToken {
@@ -40,7 +42,7 @@ export function AccessTokenFromJSON(json: any): AccessToken {
 }
 
 export function AccessTokenFromJSONTyped(json: any, ignoreDiscriminator: boolean): AccessToken {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
@@ -50,12 +52,15 @@ export function AccessTokenFromJSONTyped(json: any, ignoreDiscriminator: boolean
 }
 
 export function AccessTokenToJSON(value?: AccessToken | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'access_token': value['accessToken'],
+        'access_token': value.accessToken,
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -37,9 +37,11 @@ export interface VerifyCodeRequest {
  * Check if a given object implements the VerifyCodeRequest interface.
  */
 export function instanceOfVerifyCodeRequest(value: object): boolean {
-    if (!('email' in value)) return false;
-    if (!('code' in value)) return false;
-    return true;
+    let isInstance = true;
+    isInstance = isInstance && "email" in value;
+    isInstance = isInstance && "code" in value;
+
+    return isInstance;
 }
 
 export function VerifyCodeRequestFromJSON(json: any): VerifyCodeRequest {
@@ -47,7 +49,7 @@ export function VerifyCodeRequestFromJSON(json: any): VerifyCodeRequest {
 }
 
 export function VerifyCodeRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): VerifyCodeRequest {
-    if (json == null) {
+    if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
@@ -58,13 +60,16 @@ export function VerifyCodeRequestFromJSONTyped(json: any, ignoreDiscriminator: b
 }
 
 export function VerifyCodeRequestToJSON(value?: VerifyCodeRequest | null): any {
-    if (value == null) {
-        return value;
+    if (value === undefined) {
+        return undefined;
+    }
+    if (value === null) {
+        return null;
     }
     return {
         
-        'email': value['email'],
-        'code': value['code'],
+        'email': value.email,
+        'code': value.code,
     };
 }
 

@@ -83,11 +83,8 @@ export class UsersApi extends runtime.BaseAPI {
      * ユーザーIDをフォローする。またはフォローリクエストを送る
      */
     async createFollowRaw(requestParameters: CreateFollowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Relationship>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling createFollow().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling createFollow.');
         }
 
         const queryParameters: any = {};
@@ -103,7 +100,7 @@ export class UsersApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/users/{id}/follow`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/users/{id}/follow`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -124,11 +121,8 @@ export class UsersApi extends runtime.BaseAPI {
      * ユーザーIDをフォロー解除する。またはフォローリクエストをキャンセルする
      */
     async deleteFollowRaw(requestParameters: DeleteFollowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling deleteFollow().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteFollow.');
         }
 
         const queryParameters: any = {};
@@ -144,7 +138,7 @@ export class UsersApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/users/{id}/follow`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/users/{id}/follow`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -198,11 +192,8 @@ export class UsersApi extends runtime.BaseAPI {
      * ユーザーIDとの関係を取得する
      */
     async getRelationShipRaw(requestParameters: GetRelationShipRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Relationship>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getRelationShip().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getRelationShip.');
         }
 
         const queryParameters: any = {};
@@ -218,7 +209,7 @@ export class UsersApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/users/{id}/relationship`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/users/{id}/relationship`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -239,11 +230,8 @@ export class UsersApi extends runtime.BaseAPI {
      * ユーザーIDからユーザーを取得する
      */
     async getUserByIdRaw(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserWithFollows>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getUserById().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserById.');
         }
 
         const queryParameters: any = {};
@@ -251,7 +239,7 @@ export class UsersApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/v0/users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -272,11 +260,8 @@ export class UsersApi extends runtime.BaseAPI {
      * ユーザー名からユーザーを取得する
      */
     async getUserByUsernameRaw(requestParameters: GetUserByUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserWithFollows>> {
-        if (requestParameters['username'] == null) {
-            throw new runtime.RequiredError(
-                'username',
-                'Required parameter "username" was null or undefined when calling getUserByUsername().'
-            );
+        if (requestParameters.username === null || requestParameters.username === undefined) {
+            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling getUserByUsername.');
         }
 
         const queryParameters: any = {};
@@ -284,7 +269,7 @@ export class UsersApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/v0/users/by/username/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters['username']))),
+            path: `/v0/users/by/username/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -305,21 +290,18 @@ export class UsersApi extends runtime.BaseAPI {
      * ユーザーIDからフォロワーを取得する
      */
     async getUserFollowersRaw(requestParameters: GetUserFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FollowList>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getUserFollowers().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserFollowers.');
         }
 
         const queryParameters: any = {};
 
-        if (requestParameters['until'] != null) {
-            queryParameters['until'] = (requestParameters['until'] as any).toISOString();
+        if (requestParameters.until !== undefined) {
+            queryParameters['until'] = (requestParameters.until as any).toISOString();
         }
 
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -333,7 +315,7 @@ export class UsersApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/users/{id}/followers`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/users/{id}/followers`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -354,21 +336,18 @@ export class UsersApi extends runtime.BaseAPI {
      * ユーザーIDからフォローを取得する
      */
     async getUserFollowingRaw(requestParameters: GetUserFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<FollowList>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getUserFollowing().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserFollowing.');
         }
 
         const queryParameters: any = {};
 
-        if (requestParameters['until'] != null) {
-            queryParameters['until'] = (requestParameters['until'] as any).toISOString();
+        if (requestParameters.until !== undefined) {
+            queryParameters['until'] = (requestParameters.until as any).toISOString();
         }
 
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -382,7 +361,7 @@ export class UsersApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/users/{id}/following`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/users/{id}/following`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -403,29 +382,26 @@ export class UsersApi extends runtime.BaseAPI {
      * ユーザーIDから投稿を取得する
      */
     async getUserPostsRaw(requestParameters: GetUserPostsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserPost>>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getUserPosts().'
-            );
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getUserPosts.');
         }
 
         const queryParameters: any = {};
 
-        if (requestParameters['maxId'] != null) {
-            queryParameters['max_id'] = requestParameters['maxId'];
+        if (requestParameters.maxId !== undefined) {
+            queryParameters['max_id'] = requestParameters.maxId;
         }
 
-        if (requestParameters['sinceId'] != null) {
-            queryParameters['since_id'] = requestParameters['sinceId'];
+        if (requestParameters.sinceId !== undefined) {
+            queryParameters['since_id'] = requestParameters.sinceId;
         }
 
-        if (requestParameters['minId'] != null) {
-            queryParameters['min_id'] = requestParameters['minId'];
+        if (requestParameters.minId !== undefined) {
+            queryParameters['min_id'] = requestParameters.minId;
         }
 
-        if (requestParameters['limit'] != null) {
-            queryParameters['limit'] = requestParameters['limit'];
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -439,7 +415,7 @@ export class UsersApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/users/{id}/posts`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/v0/users/{id}/posts`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
