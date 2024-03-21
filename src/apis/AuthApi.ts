@@ -62,8 +62,11 @@ export class AuthApi extends runtime.BaseAPI {
      * 仮登録API
      */
     async postPreSignUpRaw(requestParameters: PostPreSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.preUserRequest === null || requestParameters.preUserRequest === undefined) {
-            throw new runtime.RequiredError('preUserRequest','Required parameter requestParameters.preUserRequest was null or undefined when calling postPreSignUp.');
+        if (requestParameters['preUserRequest'] == null) {
+            throw new runtime.RequiredError(
+                'preUserRequest',
+                'Required parameter "preUserRequest" was null or undefined when calling postPreSignUp().'
+            );
         }
 
         const queryParameters: any = {};
@@ -77,7 +80,7 @@ export class AuthApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PreUserRequestToJSON(requestParameters.preUserRequest),
+            body: PreUserRequestToJSON(requestParameters['preUserRequest']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -94,8 +97,11 @@ export class AuthApi extends runtime.BaseAPI {
      * 認証コードの確認
      */
     async postPreSignUpVerifyCodeRaw(requestParameters: PostPreSignUpVerifyCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.verifyCodeRequest === null || requestParameters.verifyCodeRequest === undefined) {
-            throw new runtime.RequiredError('verifyCodeRequest','Required parameter requestParameters.verifyCodeRequest was null or undefined when calling postPreSignUpVerifyCode.');
+        if (requestParameters['verifyCodeRequest'] == null) {
+            throw new runtime.RequiredError(
+                'verifyCodeRequest',
+                'Required parameter "verifyCodeRequest" was null or undefined when calling postPreSignUpVerifyCode().'
+            );
         }
 
         const queryParameters: any = {};
@@ -109,7 +115,7 @@ export class AuthApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: VerifyCodeRequestToJSON(requestParameters.verifyCodeRequest),
+            body: VerifyCodeRequestToJSON(requestParameters['verifyCodeRequest']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -126,8 +132,11 @@ export class AuthApi extends runtime.BaseAPI {
      * ログインAPI
      */
     async postSignInRaw(requestParameters: PostSignInRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthToken>> {
-        if (requestParameters.loginRequest === null || requestParameters.loginRequest === undefined) {
-            throw new runtime.RequiredError('loginRequest','Required parameter requestParameters.loginRequest was null or undefined when calling postSignIn.');
+        if (requestParameters['loginRequest'] == null) {
+            throw new runtime.RequiredError(
+                'loginRequest',
+                'Required parameter "loginRequest" was null or undefined when calling postSignIn().'
+            );
         }
 
         const queryParameters: any = {};
@@ -141,7 +150,7 @@ export class AuthApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: LoginRequestToJSON(requestParameters.loginRequest),
+            body: LoginRequestToJSON(requestParameters['loginRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => AuthTokenFromJSON(jsonValue));
@@ -184,8 +193,11 @@ export class AuthApi extends runtime.BaseAPI {
      * 本登録API
      */
     async postSignUpRaw(requestParameters: PostSignUpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthToken>> {
-        if (requestParameters.userRequest === null || requestParameters.userRequest === undefined) {
-            throw new runtime.RequiredError('userRequest','Required parameter requestParameters.userRequest was null or undefined when calling postSignUp.');
+        if (requestParameters['userRequest'] == null) {
+            throw new runtime.RequiredError(
+                'userRequest',
+                'Required parameter "userRequest" was null or undefined when calling postSignUp().'
+            );
         }
 
         const queryParameters: any = {};
@@ -199,7 +211,7 @@ export class AuthApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UserRequestToJSON(requestParameters.userRequest),
+            body: UserRequestToJSON(requestParameters['userRequest']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => AuthTokenFromJSON(jsonValue));

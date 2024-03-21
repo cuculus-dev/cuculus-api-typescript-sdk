@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { Invitation } from './Invitation';
 import {
     InvitationFromJSON,
@@ -44,11 +44,9 @@ export interface UserInvitations {
  * Check if a given object implements the UserInvitations interface.
  */
 export function instanceOfUserInvitations(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "remainingInvitations" in value;
-    isInstance = isInstance && "invitations" in value;
-
-    return isInstance;
+    if (!('remainingInvitations' in value)) return false;
+    if (!('invitations' in value)) return false;
+    return true;
 }
 
 export function UserInvitationsFromJSON(json: any): UserInvitations {
@@ -56,7 +54,7 @@ export function UserInvitationsFromJSON(json: any): UserInvitations {
 }
 
 export function UserInvitationsFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserInvitations {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -67,16 +65,13 @@ export function UserInvitationsFromJSONTyped(json: any, ignoreDiscriminator: boo
 }
 
 export function UserInvitationsToJSON(value?: UserInvitations | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'remaining_invitations': value.remainingInvitations,
-        'invitations': ((value.invitations as Array<any>).map(InvitationToJSON)),
+        'remaining_invitations': value['remainingInvitations'],
+        'invitations': ((value['invitations'] as Array<any>).map(InvitationToJSON)),
     };
 }
 

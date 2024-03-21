@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -73,24 +73,29 @@ export interface User {
      * @memberof User
      */
     verified: boolean;
+    /**
+     * リモートユーザーかどうか
+     * @type {boolean}
+     * @memberof User
+     */
+    isRemote: boolean;
 }
 
 /**
  * Check if a given object implements the User interface.
  */
 export function instanceOfUser(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "username" in value;
-    isInstance = isInstance && "createdAt" in value;
-    isInstance = isInstance && "bio" in value;
-    isInstance = isInstance && "profileImageUrl" in value;
-    isInstance = isInstance && "isPrivate" in value;
-    isInstance = isInstance && "url" in value;
-    isInstance = isInstance && "verified" in value;
-
-    return isInstance;
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('username' in value)) return false;
+    if (!('createdAt' in value)) return false;
+    if (!('bio' in value)) return false;
+    if (!('profileImageUrl' in value)) return false;
+    if (!('isPrivate' in value)) return false;
+    if (!('url' in value)) return false;
+    if (!('verified' in value)) return false;
+    if (!('isRemote' in value)) return false;
+    return true;
 }
 
 export function UserFromJSON(json: any): User {
@@ -98,7 +103,7 @@ export function UserFromJSON(json: any): User {
 }
 
 export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -112,27 +117,26 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'isPrivate': json['is_private'],
         'url': json['url'],
         'verified': json['verified'],
+        'isRemote': json['is_remote'],
     };
 }
 
 export function UserToJSON(value?: User | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'username': value.username,
-        'created_at': (value.createdAt.toISOString()),
-        'bio': value.bio,
-        'profile_image_url': value.profileImageUrl,
-        'is_private': value.isPrivate,
-        'url': value.url,
-        'verified': value.verified,
+        'id': value['id'],
+        'name': value['name'],
+        'username': value['username'],
+        'created_at': ((value['createdAt']).toISOString()),
+        'bio': value['bio'],
+        'profile_image_url': value['profileImageUrl'],
+        'is_private': value['isPrivate'],
+        'url': value['url'],
+        'verified': value['verified'],
+        'is_remote': value['isRemote'],
     };
 }
 

@@ -75,8 +75,11 @@ export class InvitationsApi extends runtime.BaseAPI {
      * 招待コードの確認
      */
     async postInvitationVerifyCodeRaw(requestParameters: PostInvitationVerifyCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.invitationCodeRequest === null || requestParameters.invitationCodeRequest === undefined) {
-            throw new runtime.RequiredError('invitationCodeRequest','Required parameter requestParameters.invitationCodeRequest was null or undefined when calling postInvitationVerifyCode.');
+        if (requestParameters['invitationCodeRequest'] == null) {
+            throw new runtime.RequiredError(
+                'invitationCodeRequest',
+                'Required parameter "invitationCodeRequest" was null or undefined when calling postInvitationVerifyCode().'
+            );
         }
 
         const queryParameters: any = {};
@@ -90,7 +93,7 @@ export class InvitationsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: InvitationCodeRequestToJSON(requestParameters.invitationCodeRequest),
+            body: InvitationCodeRequestToJSON(requestParameters['invitationCodeRequest']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);

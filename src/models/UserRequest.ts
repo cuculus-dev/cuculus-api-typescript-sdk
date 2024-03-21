@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -55,13 +55,11 @@ export interface UserRequest {
  * Check if a given object implements the UserRequest interface.
  */
 export function instanceOfUserRequest(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "email" in value;
-    isInstance = isInstance && "code" in value;
-    isInstance = isInstance && "username" in value;
-    isInstance = isInstance && "password" in value;
-
-    return isInstance;
+    if (!('email' in value)) return false;
+    if (!('code' in value)) return false;
+    if (!('username' in value)) return false;
+    if (!('password' in value)) return false;
+    return true;
 }
 
 export function UserRequestFromJSON(json: any): UserRequest {
@@ -69,7 +67,7 @@ export function UserRequestFromJSON(json: any): UserRequest {
 }
 
 export function UserRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserRequest {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -78,24 +76,21 @@ export function UserRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'code': json['code'],
         'username': json['username'],
         'password': json['password'],
-        'invitationCode': !exists(json, 'invitation_code') ? undefined : json['invitation_code'],
+        'invitationCode': json['invitation_code'] == null ? undefined : json['invitation_code'],
     };
 }
 
 export function UserRequestToJSON(value?: UserRequest | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'email': value.email,
-        'code': value.code,
-        'username': value.username,
-        'password': value.password,
-        'invitation_code': value.invitationCode,
+        'email': value['email'],
+        'code': value['code'],
+        'username': value['username'],
+        'password': value['password'],
+        'invitation_code': value['invitationCode'],
     };
 }
 

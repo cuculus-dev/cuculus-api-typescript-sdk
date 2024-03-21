@@ -47,20 +47,20 @@ export class TimelinesApi extends runtime.BaseAPI {
     async getHomeTimelineRaw(requestParameters: GetHomeTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserPost>>> {
         const queryParameters: any = {};
 
-        if (requestParameters.maxId !== undefined) {
-            queryParameters['max_id'] = requestParameters.maxId;
+        if (requestParameters['maxId'] != null) {
+            queryParameters['max_id'] = requestParameters['maxId'];
         }
 
-        if (requestParameters.sinceId !== undefined) {
-            queryParameters['since_id'] = requestParameters.sinceId;
+        if (requestParameters['sinceId'] != null) {
+            queryParameters['since_id'] = requestParameters['sinceId'];
         }
 
-        if (requestParameters.minId !== undefined) {
-            queryParameters['min_id'] = requestParameters.minId;
+        if (requestParameters['minId'] != null) {
+            queryParameters['min_id'] = requestParameters['minId'];
         }
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -97,20 +97,20 @@ export class TimelinesApi extends runtime.BaseAPI {
     async getPublicTimelineRaw(requestParameters: GetPublicTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserPost>>> {
         const queryParameters: any = {};
 
-        if (requestParameters.maxId !== undefined) {
-            queryParameters['max_id'] = requestParameters.maxId;
+        if (requestParameters['maxId'] != null) {
+            queryParameters['max_id'] = requestParameters['maxId'];
         }
 
-        if (requestParameters.sinceId !== undefined) {
-            queryParameters['since_id'] = requestParameters.sinceId;
+        if (requestParameters['sinceId'] != null) {
+            queryParameters['since_id'] = requestParameters['sinceId'];
         }
 
-        if (requestParameters.minId !== undefined) {
-            queryParameters['min_id'] = requestParameters.minId;
+        if (requestParameters['minId'] != null) {
+            queryParameters['min_id'] = requestParameters['minId'];
         }
 
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
+        if (requestParameters['limit'] != null) {
+            queryParameters['limit'] = requestParameters['limit'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

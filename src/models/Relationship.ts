@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -43,12 +43,10 @@ export interface Relationship {
  * Check if a given object implements the Relationship interface.
  */
 export function instanceOfRelationship(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "following" in value;
-    isInstance = isInstance && "followRequested" in value;
-
-    return isInstance;
+    if (!('id' in value)) return false;
+    if (!('following' in value)) return false;
+    if (!('followRequested' in value)) return false;
+    return true;
 }
 
 export function RelationshipFromJSON(json: any): Relationship {
@@ -56,7 +54,7 @@ export function RelationshipFromJSON(json: any): Relationship {
 }
 
 export function RelationshipFromJSONTyped(json: any, ignoreDiscriminator: boolean): Relationship {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -68,17 +66,14 @@ export function RelationshipFromJSONTyped(json: any, ignoreDiscriminator: boolea
 }
 
 export function RelationshipToJSON(value?: Relationship | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'following': value.following,
-        'follow_requested': value.followRequested,
+        'id': value['id'],
+        'following': value['following'],
+        'follow_requested': value['followRequested'],
     };
 }
 

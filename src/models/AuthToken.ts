@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -43,11 +43,9 @@ export interface AuthToken {
  * Check if a given object implements the AuthToken interface.
  */
 export function instanceOfAuthToken(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "accessToken" in value;
-    isInstance = isInstance && "authToken" in value;
-
-    return isInstance;
+    if (!('accessToken' in value)) return false;
+    if (!('authToken' in value)) return false;
+    return true;
 }
 
 export function AuthTokenFromJSON(json: any): AuthToken {
@@ -55,29 +53,26 @@ export function AuthTokenFromJSON(json: any): AuthToken {
 }
 
 export function AuthTokenFromJSONTyped(json: any, ignoreDiscriminator: boolean): AuthToken {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
         'accessToken': json['access_token'],
         'authToken': json['auth_token'],
-        'expiresAt': !exists(json, 'expires_at') ? undefined : (new Date(json['expires_at'])),
+        'expiresAt': json['expires_at'] == null ? undefined : (new Date(json['expires_at'])),
     };
 }
 
 export function AuthTokenToJSON(value?: AuthToken | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'access_token': value.accessToken,
-        'auth_token': value.authToken,
-        'expires_at': value.expiresAt === undefined ? undefined : (value.expiresAt.toISOString()),
+        'access_token': value['accessToken'],
+        'auth_token': value['authToken'],
+        'expires_at': value['expiresAt'] == null ? undefined : ((value['expiresAt']).toISOString()),
     };
 }
 

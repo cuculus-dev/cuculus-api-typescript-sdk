@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -74,6 +74,12 @@ export interface UserWithFollows {
      */
     verified: boolean;
     /**
+     * リモートユーザーかどうか
+     * @type {boolean}
+     * @memberof UserWithFollows
+     */
+    isRemote: boolean;
+    /**
      * フォロワー数
      * @type {number}
      * @memberof UserWithFollows
@@ -91,18 +97,17 @@ export interface UserWithFollows {
  * Check if a given object implements the UserWithFollows interface.
  */
 export function instanceOfUserWithFollows(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "username" in value;
-    isInstance = isInstance && "createdAt" in value;
-    isInstance = isInstance && "bio" in value;
-    isInstance = isInstance && "profileImageUrl" in value;
-    isInstance = isInstance && "isPrivate" in value;
-    isInstance = isInstance && "url" in value;
-    isInstance = isInstance && "verified" in value;
-
-    return isInstance;
+    if (!('id' in value)) return false;
+    if (!('name' in value)) return false;
+    if (!('username' in value)) return false;
+    if (!('createdAt' in value)) return false;
+    if (!('bio' in value)) return false;
+    if (!('profileImageUrl' in value)) return false;
+    if (!('isPrivate' in value)) return false;
+    if (!('url' in value)) return false;
+    if (!('verified' in value)) return false;
+    if (!('isRemote' in value)) return false;
+    return true;
 }
 
 export function UserWithFollowsFromJSON(json: any): UserWithFollows {
@@ -110,7 +115,7 @@ export function UserWithFollowsFromJSON(json: any): UserWithFollows {
 }
 
 export function UserWithFollowsFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserWithFollows {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -124,31 +129,30 @@ export function UserWithFollowsFromJSONTyped(json: any, ignoreDiscriminator: boo
         'isPrivate': json['is_private'],
         'url': json['url'],
         'verified': json['verified'],
-        'followersCount': !exists(json, 'followers_count') ? undefined : json['followers_count'],
-        'followingCount': !exists(json, 'following_count') ? undefined : json['following_count'],
+        'isRemote': json['is_remote'],
+        'followersCount': json['followers_count'] == null ? undefined : json['followers_count'],
+        'followingCount': json['following_count'] == null ? undefined : json['following_count'],
     };
 }
 
 export function UserWithFollowsToJSON(value?: UserWithFollows | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'name': value.name,
-        'username': value.username,
-        'created_at': (value.createdAt.toISOString()),
-        'bio': value.bio,
-        'profile_image_url': value.profileImageUrl,
-        'is_private': value.isPrivate,
-        'url': value.url,
-        'verified': value.verified,
-        'followers_count': value.followersCount,
-        'following_count': value.followingCount,
+        'id': value['id'],
+        'name': value['name'],
+        'username': value['username'],
+        'created_at': ((value['createdAt']).toISOString()),
+        'bio': value['bio'],
+        'profile_image_url': value['profileImageUrl'],
+        'is_private': value['isPrivate'],
+        'url': value['url'],
+        'verified': value['verified'],
+        'is_remote': value['isRemote'],
+        'followers_count': value['followersCount'],
+        'following_count': value['followingCount'],
     };
 }
 

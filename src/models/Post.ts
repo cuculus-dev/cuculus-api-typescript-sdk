@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { User } from './User';
 import {
     UserFromJSON,
@@ -80,14 +80,12 @@ export interface Post {
  * Check if a given object implements the Post interface.
  */
 export function instanceOfPost(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "author" in value;
-    isInstance = isInstance && "postedAt" in value;
-    isInstance = isInstance && "repostCount" in value;
-    isInstance = isInstance && "favoriteCount" in value;
-
-    return isInstance;
+    if (!('id' in value)) return false;
+    if (!('author' in value)) return false;
+    if (!('postedAt' in value)) return false;
+    if (!('repostCount' in value)) return false;
+    if (!('favoriteCount' in value)) return false;
+    return true;
 }
 
 export function PostFromJSON(json: any): Post {
@@ -95,16 +93,16 @@ export function PostFromJSON(json: any): Post {
 }
 
 export function PostFromJSONTyped(json: any, ignoreDiscriminator: boolean): Post {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
         'id': json['id'],
-        'originalPostId': !exists(json, 'original_post_id') ? undefined : json['original_post_id'],
-        'replyToPostId': !exists(json, 'reply_to_post_id') ? undefined : json['reply_to_post_id'],
+        'originalPostId': json['original_post_id'] == null ? undefined : json['original_post_id'],
+        'replyToPostId': json['reply_to_post_id'] == null ? undefined : json['reply_to_post_id'],
         'author': UserFromJSON(json['author']),
-        'text': !exists(json, 'text') ? undefined : json['text'],
+        'text': json['text'] == null ? undefined : json['text'],
         'postedAt': (new Date(json['posted_at'])),
         'repostCount': json['repost_count'],
         'favoriteCount': json['favorite_count'],
@@ -112,22 +110,19 @@ export function PostFromJSONTyped(json: any, ignoreDiscriminator: boolean): Post
 }
 
 export function PostToJSON(value?: Post | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'id': value.id,
-        'original_post_id': value.originalPostId,
-        'reply_to_post_id': value.replyToPostId,
-        'author': UserToJSON(value.author),
-        'text': value.text,
-        'posted_at': (value.postedAt.toISOString()),
-        'repost_count': value.repostCount,
-        'favorite_count': value.favoriteCount,
+        'id': value['id'],
+        'original_post_id': value['originalPostId'],
+        'reply_to_post_id': value['replyToPostId'],
+        'author': UserToJSON(value['author']),
+        'text': value['text'],
+        'posted_at': ((value['postedAt']).toISOString()),
+        'repost_count': value['repostCount'],
+        'favorite_count': value['favoriteCount'],
     };
 }
 

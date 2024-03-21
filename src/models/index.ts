@@ -3,6 +3,7 @@
 export * from './AccessToken';
 export * from './AuthToken';
 export * from './CreatePost';
+export * from './FollowList';
 export * from './HealthControllerCheck200Response';
 export * from './HealthControllerCheck200ResponseInfoValue';
 export * from './HealthControllerCheck503Response';

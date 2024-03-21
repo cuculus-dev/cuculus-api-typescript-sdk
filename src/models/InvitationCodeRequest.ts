@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -31,10 +31,8 @@ export interface InvitationCodeRequest {
  * Check if a given object implements the InvitationCodeRequest interface.
  */
 export function instanceOfInvitationCodeRequest(value: object): boolean {
-    let isInstance = true;
-    isInstance = isInstance && "invitationCode" in value;
-
-    return isInstance;
+    if (!('invitationCode' in value)) return false;
+    return true;
 }
 
 export function InvitationCodeRequestFromJSON(json: any): InvitationCodeRequest {
@@ -42,7 +40,7 @@ export function InvitationCodeRequestFromJSON(json: any): InvitationCodeRequest 
 }
 
 export function InvitationCodeRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): InvitationCodeRequest {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
@@ -52,15 +50,12 @@ export function InvitationCodeRequestFromJSONTyped(json: any, ignoreDiscriminato
 }
 
 export function InvitationCodeRequestToJSON(value?: InvitationCodeRequest | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'invitation_code': value.invitationCode,
+        'invitation_code': value['invitationCode'],
     };
 }
 

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -37,9 +37,7 @@ export interface CreatePost {
  * Check if a given object implements the CreatePost interface.
  */
 export function instanceOfCreatePost(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+    return true;
 }
 
 export function CreatePostFromJSON(json: any): CreatePost {
@@ -47,27 +45,24 @@ export function CreatePostFromJSON(json: any): CreatePost {
 }
 
 export function CreatePostFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreatePost {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'originalPostId': !exists(json, 'original_post_id') ? undefined : json['original_post_id'],
-        'text': !exists(json, 'text') ? undefined : json['text'],
+        'originalPostId': json['original_post_id'] == null ? undefined : json['original_post_id'],
+        'text': json['text'] == null ? undefined : json['text'],
     };
 }
 
 export function CreatePostToJSON(value?: CreatePost | null): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    if (value === null) {
-        return null;
+    if (value == null) {
+        return value;
     }
     return {
         
-        'original_post_id': value.originalPostId,
-        'text': value.text,
+        'original_post_id': value['originalPostId'],
+        'text': value['text'],
     };
 }
 
