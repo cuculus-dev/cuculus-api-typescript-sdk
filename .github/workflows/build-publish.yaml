@@ -29,6 +29,9 @@ jobs:
       - name: Install openapi-generator-cli
         run: npm install -g @openapitools/openapi-generator-cli@2.13.1
 
+      - name: Set generator version
+        run: openapi-generator-cli version-manager set 7.3.0
+
       - name: Generate src
         run: openapi-generator-cli generate -i ./docs/cuculus-openapi.yaml -g typescript-fetch -o ./src -c ./config.json
 
