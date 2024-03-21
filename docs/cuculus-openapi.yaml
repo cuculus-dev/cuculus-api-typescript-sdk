@@ -143,15 +143,33 @@ paths:
           in: path
           schema:
             type: number
+        - name: until
+          required: false
+          in: query
+          example: '2024-03-21T01:56:02.464Z'
+          description: この日時より過去のフォロー/フォロワーを取得します。
+          schema:
+            format: date-time
+            type: string
+        - name: limit
+          required: false
+          in: query
+          example: 20
+          description: 取得件数
+          schema:
+            minimum: 1
+            maximum: 40
+            default: 20
+            type: number
       responses:
         '200':
           description: フォロワー一覧
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/FollowList'
+        '403':
+          description: 閲覧権限がありません
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -169,15 +187,33 @@ paths:
           in: path
           schema:
             type: number
+        - name: until
+          required: false
+          in: query
+          example: '2024-03-21T01:56:02.464Z'
+          description: この日時より過去のフォロー/フォロワーを取得します。
+          schema:
+            format: date-time
+            type: string
+        - name: limit
+          required: false
+          in: query
+          example: 20
+          description: 取得件数
+          schema:
+            minimum: 1
+            maximum: 40
+            default: 20
+            type: number
       responses:
         '200':
           description: フォロー一覧
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/FollowList'
+        '403':
+          description: 閲覧権限がありません
         '404':
           description: ユーザーが見つかりませんでした。
       tags:
@@ -212,7 +248,7 @@ paths:
         - bearer: []
     delete:
       operationId: deleteFollow
-      summary: ユーザーIDをフォロー解除する
+      summary: ユーザーIDをフォロー解除する。またはフォローリクエストをキャンセルする
       parameters:
         - name: id
           required: true
@@ -399,7 +435,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPost'
-        '401':
+        '403':
           description: 閲覧権限がありません
         '404':
           description: 投稿が見つかりませんでした。
@@ -993,6 +1029,9 @@ components:
           type: string
         verified:
           type: boolean
+        is_remote:
+          type: boolean
+          description: リモートユーザーかどうか
       required:
         - id
         - name
@@ -1003,6 +1042,7 @@ components:
         - is_private
         - url
         - verified
+        - is_remote
     UserWithFollows:
       type: object
       properties:
@@ -1026,6 +1066,9 @@ components:
           type: string
         verified:
           type: boolean
+        is_remote:
+          type: boolean
+          description: リモートユーザーかどうか
         followers_count:
           type: number
           description: フォロワー数
@@ -1044,6 +1087,7 @@ components:
         - is_private
         - url
         - verified
+        - is_remote
     Post:
       type: object
       properties:
@@ -1124,6 +1168,21 @@ components:
         - favorite_count
         - reposted
         - favorited
+    FollowList:
+      type: object
+      properties:
+        users:
+          description: ユーザー一覧
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        next_until:
+          format: date-time
+          type: string
+          description: 次ページ取得に使用するuntil
+      required:
+        - users
+        - next_until
     Relationship:
       type: object
       properties:
