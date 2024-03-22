@@ -24,7 +24,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: https://npm.pkg.github.com
 
       - name: Install openapi-generator-cli
         run: npm install -g @openapitools/openapi-generator-cli@2.13.1
