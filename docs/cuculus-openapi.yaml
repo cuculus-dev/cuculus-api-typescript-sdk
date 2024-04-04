@@ -407,7 +407,7 @@ paths:
         - invitations
       security:
         - bearer: []
-  /v0/invitations/create-ap:
+  /v0/invitations/create:
     post:
       operationId: postInvitationsCreate
       summary: 招待コードの発行
@@ -1031,7 +1031,7 @@ paths:
       security:
         - {}
         - bearer: []
-  /v0/users/{id}/follow-ap:
+  /v0/users/{id}/follow:
     post:
       operationId: createFollow
       summary: ユーザーIDをフォローする。またはフォローリクエストを送る
