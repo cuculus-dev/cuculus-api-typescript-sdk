@@ -100,7 +100,7 @@ export class UsersApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/users/{id}/follow`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/v0/users/{id}/follow-ap`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -138,7 +138,7 @@ export class UsersApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/users/{id}/follow`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            path: `/v0/users/{id}/follow-ap`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,

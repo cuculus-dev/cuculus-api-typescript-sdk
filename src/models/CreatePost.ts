@@ -26,6 +26,12 @@ export interface CreatePost {
      */
     originalPostId?: string;
     /**
+     * リプライ先ID
+     * @type {string}
+     * @memberof CreatePost
+     */
+    inReplyToId?: string;
+    /**
      * 本文
      * @type {string}
      * @memberof CreatePost
@@ -53,6 +59,7 @@ export function CreatePostFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'originalPostId': !exists(json, 'original_post_id') ? undefined : json['original_post_id'],
+        'inReplyToId': !exists(json, 'in_reply_to_id') ? undefined : json['in_reply_to_id'],
         'text': !exists(json, 'text') ? undefined : json['text'],
     };
 }
@@ -67,6 +74,7 @@ export function CreatePostToJSON(value?: CreatePost | null): any {
     return {
         
         'original_post_id': value.originalPostId,
+        'in_reply_to_id': value.inReplyToId,
         'text': value.text,
     };
 }

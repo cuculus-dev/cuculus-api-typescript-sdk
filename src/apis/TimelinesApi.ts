@@ -29,6 +29,13 @@ export interface GetHomeTimelineRequest {
     limit?: number;
 }
 
+export interface GetLocalTimelineRequest {
+    maxId?: string;
+    sinceId?: string;
+    minId?: string;
+    limit?: number;
+}
+
 export interface GetPublicTimelineRequest {
     maxId?: string;
     sinceId?: string;
@@ -88,6 +95,56 @@ export class TimelinesApi extends runtime.BaseAPI {
      */
     async getHomeTimeline(requestParameters: GetHomeTimelineRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserPost>> {
         const response = await this.getHomeTimelineRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * ローカルタイムラインの取得(廃止予定)
+     */
+    async getLocalTimelineRaw(requestParameters: GetLocalTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserPost>>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.maxId !== undefined) {
+            queryParameters['max_id'] = requestParameters.maxId;
+        }
+
+        if (requestParameters.sinceId !== undefined) {
+            queryParameters['since_id'] = requestParameters.sinceId;
+        }
+
+        if (requestParameters.minId !== undefined) {
+            queryParameters['min_id'] = requestParameters.minId;
+        }
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/v0/timelines/local`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UserPostFromJSON));
+    }
+
+    /**
+     * ローカルタイムラインの取得(廃止予定)
+     */
+    async getLocalTimeline(requestParameters: GetLocalTimelineRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UserPost>> {
+        const response = await this.getLocalTimelineRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

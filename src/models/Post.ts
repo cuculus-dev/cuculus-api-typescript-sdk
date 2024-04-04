@@ -13,6 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ATProtocolPost } from './ATProtocolPost';
+import {
+    ATProtocolPostFromJSON,
+    ATProtocolPostFromJSONTyped,
+    ATProtocolPostToJSON,
+} from './ATProtocolPost';
+import type { ActivityPubPost } from './ActivityPubPost';
+import {
+    ActivityPubPostFromJSON,
+    ActivityPubPostFromJSONTyped,
+    ActivityPubPostToJSON,
+} from './ActivityPubPost';
 import type { User } from './User';
 import {
     UserFromJSON,
@@ -74,6 +86,18 @@ export interface Post {
      * @memberof Post
      */
     favoriteCount: number;
+    /**
+     * 
+     * @type {ActivityPubPost}
+     * @memberof Post
+     */
+    activityPub?: ActivityPubPost;
+    /**
+     * 
+     * @type {ATProtocolPost}
+     * @memberof Post
+     */
+    atProtocol?: ATProtocolPost;
 }
 
 /**
@@ -108,6 +132,8 @@ export function PostFromJSONTyped(json: any, ignoreDiscriminator: boolean): Post
         'postedAt': (new Date(json['posted_at'])),
         'repostCount': json['repost_count'],
         'favoriteCount': json['favorite_count'],
+        'activityPub': !exists(json, 'activity_pub') ? undefined : ActivityPubPostFromJSON(json['activity_pub']),
+        'atProtocol': !exists(json, 'at_protocol') ? undefined : ATProtocolPostFromJSON(json['at_protocol']),
     };
 }
 
@@ -128,6 +154,8 @@ export function PostToJSON(value?: Post | null): any {
         'posted_at': (value.postedAt.toISOString()),
         'repost_count': value.repostCount,
         'favorite_count': value.favoriteCount,
+        'activity_pub': ActivityPubPostToJSON(value.activityPub),
+        'at_protocol': ATProtocolPostToJSON(value.atProtocol),
     };
 }
 

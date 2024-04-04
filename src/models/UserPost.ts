@@ -13,6 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { ATProtocolPost } from './ATProtocolPost';
+import {
+    ATProtocolPostFromJSON,
+    ATProtocolPostFromJSONTyped,
+    ATProtocolPostToJSON,
+} from './ATProtocolPost';
+import type { ActivityPubPost } from './ActivityPubPost';
+import {
+    ActivityPubPostFromJSON,
+    ActivityPubPostFromJSONTyped,
+    ActivityPubPostToJSON,
+} from './ActivityPubPost';
 import type { Post } from './Post';
 import {
     PostFromJSON,
@@ -82,6 +94,18 @@ export interface UserPost {
     favoriteCount: number;
     /**
      * 
+     * @type {ActivityPubPost}
+     * @memberof UserPost
+     */
+    activityPub?: ActivityPubPost;
+    /**
+     * 
+     * @type {ATProtocolPost}
+     * @memberof UserPost
+     */
+    atProtocol?: ATProtocolPost;
+    /**
+     * 
      * @type {Post}
      * @memberof UserPost
      */
@@ -134,6 +158,8 @@ export function UserPostFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'postedAt': (new Date(json['posted_at'])),
         'repostCount': json['repost_count'],
         'favoriteCount': json['favorite_count'],
+        'activityPub': !exists(json, 'activity_pub') ? undefined : ActivityPubPostFromJSON(json['activity_pub']),
+        'atProtocol': !exists(json, 'at_protocol') ? undefined : ATProtocolPostFromJSON(json['at_protocol']),
         'originalPost': !exists(json, 'original_post') ? undefined : PostFromJSON(json['original_post']),
         'reposted': json['reposted'],
         'favorited': json['favorited'],
@@ -157,6 +183,8 @@ export function UserPostToJSON(value?: UserPost | null): any {
         'posted_at': (value.postedAt.toISOString()),
         'repost_count': value.repostCount,
         'favorite_count': value.favoriteCount,
+        'activity_pub': ActivityPubPostToJSON(value.activityPub),
+        'at_protocol': ATProtocolPostToJSON(value.atProtocol),
         'original_post': PostToJSON(value.originalPost),
         'reposted': value.reposted,
         'favorited': value.favorited,

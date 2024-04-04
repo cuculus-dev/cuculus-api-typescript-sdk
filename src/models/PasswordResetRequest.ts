@@ -16,50 +16,42 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface LoginRequest
+ * @interface PasswordResetRequest
  */
-export interface LoginRequest {
+export interface PasswordResetRequest {
     /**
-     * ユーザーID or メールアドレス
+     * ユーザー名 or メールアドレス
      * @type {string}
-     * @memberof LoginRequest
+     * @memberof PasswordResetRequest
      */
     username: string;
-    /**
-     * パスワード
-     * @type {string}
-     * @memberof LoginRequest
-     */
-    password: string;
 }
 
 /**
- * Check if a given object implements the LoginRequest interface.
+ * Check if a given object implements the PasswordResetRequest interface.
  */
-export function instanceOfLoginRequest(value: object): boolean {
+export function instanceOfPasswordResetRequest(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "username" in value;
-    isInstance = isInstance && "password" in value;
 
     return isInstance;
 }
 
-export function LoginRequestFromJSON(json: any): LoginRequest {
-    return LoginRequestFromJSONTyped(json, false);
+export function PasswordResetRequestFromJSON(json: any): PasswordResetRequest {
+    return PasswordResetRequestFromJSONTyped(json, false);
 }
 
-export function LoginRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): LoginRequest {
+export function PasswordResetRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): PasswordResetRequest {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'username': json['username'],
-        'password': json['password'],
     };
 }
 
-export function LoginRequestToJSON(value?: LoginRequest | null): any {
+export function PasswordResetRequestToJSON(value?: PasswordResetRequest | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -69,7 +61,6 @@ export function LoginRequestToJSON(value?: LoginRequest | null): any {
     return {
         
         'username': value.username,
-        'password': value.password,
     };
 }
 
