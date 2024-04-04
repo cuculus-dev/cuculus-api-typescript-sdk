@@ -120,7 +120,7 @@ export class InvitationsApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/v0/invitations/create-ap`,
+            path: `/v0/invitations/create`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
